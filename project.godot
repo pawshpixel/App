@@ -1,14 +1,23 @@
 ; Engine configuration file.
-; Open this folder in Godot 4.4 or newer (Project Manager → Import → select this file).
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
 
 config_version=5
+
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
 config/name="302"
 config/description="A merge game that begins again."
 run/main_scene="res://scenes/main.tscn"
-config/features=PackedStringArray("4.4", "Mobile")
+config/features=PackedStringArray("4.7", "Mobile")
 boot_splash/bg_color=Color(0.027, 0.035, 0.059, 1)
 config/icon="res://icon.svg"
 
