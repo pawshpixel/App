@@ -1,0 +1,83 @@
+extends Node
+## Every chapter, chain and item, loaded from data/chapters.json. Autoloaded as ItemDB.
+## That JSON is exported from tools/chapters.py, the same data the design bible is built from.
+
+const DATA_PATH := "res://data/chapters.json"
+
+var chapters: Array = []
+var items := {}     # id -> {id, name, desc, chapter, color, star, next, path}
+var recipes := {}   # "a|b" (sorted) -> result id
+
+
+func _ready() -> void:
+	var text := FileAccess.get_file_as_string(DATA_PATH)
+	var parsed = JSON.parse_string(text)
+	if typeof(parsed) != TYPE_DICTIONARY:
+		push_error("Could not read %s" % DATA_PATH)
+		return
+	chapters = parsed["chapters"]
+	for ci in chapters.size():
+		_index_chapter(ci, chapters[ci])
+	items["neuron_303"] = {
+		"id": "neuron_303", "name": "Neuron 303", "chapter": 0, "color": Color("f28b82"), "star": false,
+		"desc": "no pair. no place in the worm. it isn't yours. it came in with you.",
+		"next": "", "path": ["neuron_303"],
+	}
+
+
+func _index_chapter(ci: int, ch: Dictionary) -> void:
+	var final_id: String = ch["final"]["id"]
+	var extra_id: String = ch["extra"]["id"] if ch.has("extra") else ""
+	var extra_path: Array = []
+	for track in ch["tracks"]:
+		var ids: Array = []
+		for it in track["items"]:
+			ids.append(it["id"])
+		var path := ids.duplicate()
+		if extra_id != "" and ch["extra"]["recipe"].has(ids[-1]):
+			path.append(extra_id)
+			extra_path = path
+		else:
+			path.append(final_id)
+		for i in ids.size():
+			var it: Dictionary = track["items"][i]
+			items[it["id"]] = {
+				"id": it["id"], "name": it["name"], "desc": it["desc"], "chapter": ci,
+				"color": Color(track["color"]), "star": false,
+				"next": ids[i + 1] if i + 1 < ids.size() else "", "path": path,
+			}
+	for key in ["final", "extra"]:
+		if not ch.has(key):
+			continue
+		var f: Dictionary = ch[key]
+		items[f["id"]] = {
+			"id": f["id"], "name": f["name"], "desc": f["desc"], "chapter": ci,
+			"color": Color(ch["star_color"]), "star": key == "final", "next": "",
+			"path": extra_path if key == "extra" and not extra_path.is_empty() else [f["id"]],
+		}
+		recipes[_pair(f["recipe"][0], f["recipe"][1])] = f["id"]
+
+
+func _pair(a: String, b: String) -> String:
+	return "%s|%s" % [a, b] if a < b else "%s|%s" % [b, a]
+
+
+## The item two items merge into, or "" if they don't merge.
+func merge_result(a: String, b: String) -> String:
+	var key := _pair(a, b)
+	if recipes.has(key):
+		return recipes[key]
+	if a == b and items.has(a):
+		return items[a]["next"]
+	return ""
+
+
+func item(id: String) -> Dictionary:
+	return items.get(id, {})
+
+
+func first_items(chapter_index: int) -> Array:
+	var out: Array = []
+	for track in chapters[chapter_index]["tracks"]:
+		out.append({"id": track["items"][0]["id"], "generator": track["generator"], "color": Color(track["color"])})
+	return out

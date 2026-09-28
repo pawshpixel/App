@@ -1,0 +1,1390 @@
+{
+ "chapters": [
+  {
+   "key": "tut",
+   "num": "Tutorial",
+   "title": "The Worm",
+   "hidden": false,
+   "board_color": "#07090f",
+   "star_color": "#e87b9b",
+   "tracks": [
+    {
+     "title": "The Worm",
+     "color": "#e87b9b",
+     "generator": "always",
+     "items": [
+      {
+       "id": "neuron",
+       "name": "Neuron",
+       "desc": "one cell that carries a signal. alone, it can't do anything."
+      },
+      {
+       "id": "neuron_pair",
+       "name": "Neuron Pair",
+       "desc": "two neurons touching. the gap between them is a synapse. the worm has about 7,000 of these. you have around 100 trillion."
+      },
+      {
+       "id": "nerve_bundle",
+       "name": "Nerve Bundle",
+       "desc": "neurons wired together. touch the worm's nose and this is what makes it back away."
+      },
+      {
+       "id": "nerve_ring",
+       "name": "Nerve Ring",
+       "desc": "the worm's brain is a ring wrapped around its throat. everything it knows passes through here."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "the_worm",
+    "name": "The Worm ★",
+    "desc": "c. elegans. one millimeter long. 302 neurons, every one mapped. in 2014 its wiring was loaded into a lego robot, and the robot moved like a worm.",
+    "recipe": [
+     "nerve_ring",
+     "nerve_ring"
+    ]
+   },
+   "special": {
+    "generator_limit": {
+     "1": 16,
+     "2": 17
+    },
+    "counter": true
+   }
+  },
+  {
+   "key": "c1",
+   "num": "Ch1",
+   "title": "The Big Bang",
+   "hidden": false,
+   "board_color": "#0b0a1c",
+   "star_color": "#ffd98a",
+   "tracks": [
+    {
+     "title": "Stars",
+     "color": "#ffe9c4",
+     "generator": "always",
+     "items": [
+      {
+       "id": "spark",
+       "name": "Spark",
+       "desc": "13.8 billion years ago, everything that exists came out of a single point. nobody knows what came before, or if 'before' even means anything."
+      },
+      {
+       "id": "atom",
+       "name": "Atom",
+       "desc": "the first atoms were almost all hydrogen, the simplest kind. about three quarters of ordinary matter still is."
+      },
+      {
+       "id": "gas_cloud",
+       "name": "Gas Cloud",
+       "desc": "hydrogen drifting in the dark until gravity pulls it into a clump."
+      },
+      {
+       "id": "star",
+       "name": "Star",
+       "desc": "an explosion held together by its own gravity. it cooks hydrogen into heavier atoms."
+      },
+      {
+       "id": "galaxy",
+       "name": "Galaxy",
+       "desc": "a hundred billion stars or more, turning together. there are hundreds of billions of galaxies."
+      }
+     ]
+    },
+    {
+     "title": "The Planet",
+     "color": "#2f7fd0",
+     "generator": "always",
+     "items": [
+      {
+       "id": "dust",
+       "name": "Dust",
+       "desc": "the iron in your blood and the calcium in your bones came from stars that exploded before the sun was born."
+      },
+      {
+       "id": "rock",
+       "name": "Rock",
+       "desc": "dust sticks to dust. then rock hits rock, for millions of years."
+      },
+      {
+       "id": "planet",
+       "name": "Planet",
+       "desc": "a new world, red-hot from every collision. one of those collisions knocked loose the moon."
+      },
+      {
+       "id": "earth",
+       "name": "Earth",
+       "desc": "the right distance from its star for water to stay liquid."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "pale_blue_dot",
+    "name": "Pale Blue Dot ★",
+    "desc": "in 1990, voyager 1 turned around and photographed earth from six billion kilometers away. it's smaller than a pixel. everyone who has ever lived is in that pixel.",
+    "recipe": [
+     "galaxy",
+     "earth"
+    ]
+   },
+   "special": {}
+  },
+  {
+   "key": "c2",
+   "num": "Ch2",
+   "title": "Life",
+   "hidden": false,
+   "board_color": "#07141a",
+   "star_color": "#d4a03a",
+   "tracks": [
+    {
+     "title": "Life",
+     "color": "#4fb8e0",
+     "generator": "always",
+     "items": [
+      {
+       "id": "cell",
+       "name": "Cell",
+       "desc": "every living thing that has ever existed descends from one of these."
+      },
+      {
+       "id": "jellyfish",
+       "name": "Jellyfish",
+       "desc": "no brain, no heart, no bones. jellyfish have been drifting for more than 500 million years."
+      },
+      {
+       "id": "trilobite",
+       "name": "Trilobite",
+       "desc": "its eyes had lenses made of crystal. it saw the world through stone."
+      },
+      {
+       "id": "fish",
+       "name": "Fish",
+       "desc": "everything with a backbone, including you, started as one of these."
+      },
+      {
+       "id": "lizard",
+       "name": "Lizard",
+       "desc": "an egg with a shell meant life could finally leave the water for good."
+      },
+      {
+       "id": "dinosaur",
+       "name": "Dinosaur",
+       "desc": "they ruled for 165 million years. tyrannosaurus lived closer in time to you than to stegosaurus."
+      }
+     ]
+    },
+    {
+     "title": "Sight",
+     "color": "#d4a03a",
+     "generator": "always",
+     "items": [
+      {
+       "id": "eye_spot",
+       "name": "Eye Spot",
+       "desc": "a patch of cells that can tell light from dark. that's all. that's everything."
+      },
+      {
+       "id": "eye_cup",
+       "name": "Eye Cup",
+       "desc": "fold the patch inward and now it knows which direction the light came from."
+      },
+      {
+       "id": "eyeball",
+       "name": "Eyeball",
+       "desc": "add a lens and the world comes into focus. eyes evolved on their own more than 40 separate times."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "the_eye",
+    "name": "The Eye ★",
+    "desc": "541 million years ago, the first eyes opened. by the time of the dinosaurs, the world had been watched for 300 million years. it has never stopped.",
+    "recipe": [
+     "dinosaur",
+     "eyeball"
+    ]
+   },
+   "special": {}
+  },
+  {
+   "key": "c3",
+   "num": "Ch3",
+   "title": "After the Asteroid",
+   "hidden": false,
+   "board_color": "#140c0a",
+   "star_color": "#c8e8ff",
+   "tracks": [
+    {
+     "title": "The End",
+     "color": "#ff9c3a",
+     "generator": "always",
+     "items": [
+      {
+       "id": "asteroid",
+       "name": "Asteroid",
+       "desc": "ten kilometers wide. its orbit and ours were always going to meet."
+      },
+      {
+       "id": "fireball",
+       "name": "Fireball",
+       "desc": "about twenty kilometers per second. it crossed the sky in seconds."
+      },
+      {
+       "id": "crater",
+       "name": "Crater",
+       "desc": "180 kilometers wide, buried under mexico. three out of four species didn't survive what came next."
+      },
+      {
+       "id": "ash_cloud",
+       "name": "Ash Cloud",
+       "desc": "soot blocked the sun for years. the world went dark and cold."
+      }
+     ]
+    },
+    {
+     "title": "The Survivors",
+     "color": "#c8e8ff",
+     "generator": "always",
+     "items": [
+      {
+       "id": "mouse",
+       "name": "Mouse",
+       "desc": "the mammals that survived were small. they lived underground and came out at night."
+      },
+      {
+       "id": "lemur",
+       "name": "Lemur",
+       "desc": "hands that grip. eyes that face forward."
+      },
+      {
+       "id": "monkey",
+       "name": "Monkey",
+       "desc": "a bigger brain, a longer childhood, a family."
+      },
+      {
+       "id": "ape",
+       "name": "Ape",
+       "desc": "no tail. around seven million years ago, one line of apes started walking on two legs."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "footprint",
+    "name": "Footprint ★",
+    "desc": "3.66 million years ago, two people walked across fresh volcanic ash in tanzania. rain set it like cement. their footprints are still there.",
+    "recipe": [
+     "ash_cloud",
+     "ape"
+    ]
+   },
+   "special": {}
+  },
+  {
+   "key": "c4",
+   "num": "Ch4",
+   "title": "The Cavemen",
+   "hidden": false,
+   "board_color": "#140e08",
+   "star_color": "#f5a05a",
+   "tracks": [
+    {
+     "title": "A Life",
+     "color": "#f5a05a",
+     "generator": "always",
+     "items": [
+      {
+       "id": "baby",
+       "name": "Baby",
+       "desc": "human babies are born more helpless than almost any other animal. someone has to stay."
+      },
+      {
+       "id": "child",
+       "name": "Child",
+       "desc": "learns everything by copying. watch what you teach it."
+      },
+      {
+       "id": "teen",
+       "name": "Teen",
+       "desc": "a brain rewiring itself. it won't finish until around 25."
+      },
+      {
+       "id": "adult",
+       "name": "Adult",
+       "desc": "hunts, gathers, carries, remembers where the water is."
+      },
+      {
+       "id": "elder",
+       "name": "Elder",
+       "desc": "for most of history, the oldest person alive was the whole library."
+      }
+     ]
+    },
+    {
+     "title": "Discovery",
+     "color": "#c8a45a",
+     "generator": "always",
+     "items": [
+      {
+       "id": "stone_tool",
+       "name": "Stone Tool",
+       "desc": "3.3 million years old, older than our species. someone hit a rock with a rock, on purpose."
+      },
+      {
+       "id": "flint",
+       "name": "Flint",
+       "desc": "strike it against the right stone and you get a spark."
+      },
+      {
+       "id": "fire",
+       "name": "Fire",
+       "desc": "cooked food is easier to digest. some scientists think fire is why our brains got so big."
+      },
+      {
+       "id": "spear",
+       "name": "Spear",
+       "desc": "now we could hunt things bigger than us."
+      },
+      {
+       "id": "bone_needle",
+       "name": "Bone Needle",
+       "desc": "clothes. which meant cold places. which meant everywhere."
+      },
+      {
+       "id": "cave_painting",
+       "name": "Cave Painting",
+       "desc": "animals in ochre and charcoal, painted by firelight deep inside a cave."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "handprint",
+    "name": "Handprint ★",
+    "desc": "paint blown around a hand pressed to a cave wall, tens of thousands of years ago. it means: i was here.",
+    "recipe": [
+     "elder",
+     "cave_painting"
+    ]
+   },
+   "special": {}
+  },
+  {
+   "key": "c5",
+   "num": "Ch5",
+   "title": "The Inventors",
+   "hidden": false,
+   "board_color": "#12100a",
+   "star_color": "#c8a45a",
+   "tracks": [
+    {
+     "title": "Power",
+     "color": "#f5a05a",
+     "generator": "always",
+     "items": [
+      {
+       "id": "wheel",
+       "name": "Wheel",
+       "desc": "about 5,500 years ago. first for pottery. then someone turned it on its side."
+      },
+      {
+       "id": "water_wheel",
+       "name": "Water Wheel",
+       "desc": "the river does the work now."
+      },
+      {
+       "id": "steam_engine",
+       "name": "Steam Engine",
+       "desc": "boil water, push a piston, change the world."
+      },
+      {
+       "id": "kite",
+       "name": "Kite",
+       "desc": "1752. ben franklin flew a kite into a storm to prove lightning was electricity."
+      },
+      {
+       "id": "lightbulb",
+       "name": "Lightbulb",
+       "desc": "edison's team tested thousands of materials. the one that lasted 1,200 hours was bamboo."
+      }
+     ]
+    },
+    {
+     "title": "Words",
+     "color": "#e8e4f0",
+     "generator": "always",
+     "items": [
+      {
+       "id": "clay_tablet",
+       "name": "Clay Tablet",
+       "desc": "writing was invented to keep track of grain and debt. poetry came later."
+      },
+      {
+       "id": "printing_press",
+       "name": "Printing Press",
+       "desc": "around 1440. ideas stopped dying with the people who had them."
+      },
+      {
+       "id": "telegraph",
+       "name": "Telegraph",
+       "desc": "1844: 'what hath god wrought.' a message that outran a horse."
+      },
+      {
+       "id": "telephone",
+       "name": "Telephone",
+       "desc": "a voice turned into electricity and back. 'mr. watson, come here, i want to see you.'"
+      },
+      {
+       "id": "radio",
+       "name": "Radio",
+       "desc": "voices through the air. the earliest broadcasts are still traveling out into space."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "the_transistor",
+    "name": "The Transistor ★",
+    "desc": "1947. a switch with no moving parts. it only works because of quantum mechanics. there are billions of them in the phone in your hand.",
+    "recipe": [
+     "lightbulb",
+     "radio"
+    ]
+   },
+   "special": {}
+  },
+  {
+   "key": "c6",
+   "num": "Ch6",
+   "title": "The City",
+   "hidden": false,
+   "board_color": "#0a0e16",
+   "star_color": "#c8d8f0",
+   "tracks": [
+    {
+     "title": "The City",
+     "color": "#6080b0",
+     "generator": "always",
+     "items": [
+      {
+       "id": "hut",
+       "name": "Hut",
+       "desc": "four walls and a roof. the first time a place was yours."
+      },
+      {
+       "id": "house",
+       "name": "House",
+       "desc": "farming meant staying. staying meant building something that would last."
+      },
+      {
+       "id": "village",
+       "name": "Village",
+       "desc": "a few families. everyone knows everyone."
+      },
+      {
+       "id": "town",
+       "name": "Town",
+       "desc": "a market, a wall, someone in charge."
+      },
+      {
+       "id": "city",
+       "name": "City",
+       "desc": "uruk, 5,000 years ago. the first time that many strangers had to live together."
+      },
+      {
+       "id": "skyscraper",
+       "name": "Skyscraper",
+       "desc": "steel frames and the elevator made up possible."
+      },
+      {
+       "id": "metropolis",
+       "name": "Metropolis",
+       "desc": "more than half of all humans live in cities now. from above at night, they look like circuitry."
+      }
+     ]
+    },
+    {
+     "title": "Motion",
+     "color": "#c8d8f0",
+     "generator": "always",
+     "items": [
+      {
+       "id": "horse_buggy",
+       "name": "Horse & Buggy",
+       "desc": "for all of history, nothing on land moved faster than a horse."
+      },
+      {
+       "id": "train",
+       "name": "Train",
+       "desc": "railroads made the world agree on what time it was."
+      },
+      {
+       "id": "car",
+       "name": "Car",
+       "desc": "freedom, traffic, the suburbs, the smell of gasoline."
+      },
+      {
+       "id": "airplane",
+       "name": "Airplane",
+       "desc": "1903. twelve seconds in the air. sixty-six years later, people walked on the moon."
+      },
+      {
+       "id": "rocket",
+       "name": "Rocket",
+       "desc": "to leave the earth you have to go about eleven kilometers per second."
+      },
+      {
+       "id": "satellite",
+       "name": "Satellite",
+       "desc": "thousands of them overhead right now. one of them is telling your phone where you are."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "data_center",
+    "name": "Data Center ★",
+    "desc": "rooms full of machines holding everything we've written, posted and searched. they never sleep. some use as much electricity as a small city.",
+    "recipe": [
+     "metropolis",
+     "satellite"
+    ]
+   },
+   "special": {}
+  },
+  {
+   "key": "c7",
+   "num": "Ch7",
+   "title": "Millennial Childhood",
+   "hidden": false,
+   "board_color": "#16110a",
+   "star_color": "#f0c060",
+   "tracks": [
+    {
+     "title": "Growing Up",
+     "color": "#f0c060",
+     "generator": "always",
+     "items": [
+      {
+       "id": "baby_bottle",
+       "name": "Baby Bottle",
+       "desc": "a newborn can only focus about 25 centimeters away. just far enough to see the face holding them."
+      },
+      {
+       "id": "pacifier",
+       "name": "Pacifier",
+       "desc": "comfort you can hold in your mouth. you'll look for it in other shapes for the rest of your life."
+      },
+      {
+       "id": "building_blocks",
+       "name": "Building Blocks",
+       "desc": "stack, knock down, stack again. the first physics you ever did."
+      },
+      {
+       "id": "crayons",
+       "name": "Crayons",
+       "desc": "the 64-box with the sharpener built into the back."
+      },
+      {
+       "id": "lunchbox",
+       "name": "Lunchbox",
+       "desc": "a metal box with a cartoon on the lid and a thermos that always leaked."
+      },
+      {
+       "id": "school_bus",
+       "name": "School Bus",
+       "desc": "the same seat every morning. the smell of vinyl and rain."
+      },
+      {
+       "id": "backpack",
+       "name": "Backpack",
+       "desc": "everything important, on your back, every day."
+      }
+     ]
+    },
+    {
+     "title": "The Toy Box",
+     "color": "#ff7ad9",
+     "generator": "always",
+     "items": [
+      {
+       "id": "trolls_doll",
+       "name": "Trolls Doll",
+       "desc": "first carved by a danish woodcarver in 1959. the neon hair came later."
+      },
+      {
+       "id": "poochi",
+       "name": "Poochi",
+       "desc": "a toy dog that was never going to die. you checked on it anyway."
+      },
+      {
+       "id": "furby",
+       "name": "Furby",
+       "desc": "it seemed to learn english the more you talked to it. it didn't. it was programmed to seem like it did."
+      },
+      {
+       "id": "tamagotchi",
+       "name": "Tamagotchi",
+       "desc": "a pet that lived on a keychain. if you forgot to feed it, it died. then you pressed reset."
+      },
+      {
+       "id": "game_boy",
+       "name": "Game Boy",
+       "desc": "1989. a grey brick, four AA batteries, and a whole world in green."
+      },
+      {
+       "id": "nintendo_64",
+       "name": "Nintendo 64",
+       "desc": "four controller ports. everyone in the same room, playing the same game."
+      },
+      {
+       "id": "playstation",
+       "name": "PlayStation",
+       "desc": "the memory card held fifteen blocks. you chose which ones to keep."
+      }
+     ]
+    },
+    {
+     "title": "The Kitten",
+     "color": "#e07830",
+     "generator": "after_companion",
+     "items": [
+      {
+       "id": "paw_print",
+       "name": "Paw Print",
+       "desc": "you didn't tap for this."
+      },
+      {
+       "id": "kitten",
+       "name": "Kitten",
+       "desc": "a kitten's eyes stay closed for the first week or two. then they open."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "home_video",
+    "name": "Home Video ★",
+    "desc": "a tape labeled in marker. the tv is on, the cat is on the rug, and somebody is laughing off-camera.",
+    "recipe": [
+     "backpack",
+     "playstation"
+    ]
+   },
+   "special": {
+    "companion_spawn": {
+     "item": "paw_print",
+     "after_taps": 6
+    },
+    "requires": [
+     "cat"
+    ],
+    "eye_trigger": "cat"
+   },
+   "extra": {
+    "id": "cat",
+    "name": "Cat",
+    "desc": "in 1935, a physicist imagined a cat sealed in a box, alive and dead at the same time until someone looks. you looked.",
+    "recipe": [
+     "kitten",
+     "kitten"
+    ]
+   }
+  },
+  {
+   "key": "c8",
+   "num": "Ch8",
+   "title": "The Feed",
+   "hidden": false,
+   "board_color": "#0e0c16",
+   "star_color": "#ff6b6b",
+   "tracks": [
+    {
+     "title": "The Screen",
+     "color": "#7ab4f5",
+     "generator": "always",
+     "items": [
+      {
+       "id": "old_mac",
+       "name": "Old Mac",
+       "desc": "a beige box and a startup chime. the first machine in the house that talked back."
+      },
+      {
+       "id": "floppy_disk",
+       "name": "Floppy Disk",
+       "desc": "1.44 megabytes. it's still the save icon."
+      },
+      {
+       "id": "cd",
+       "name": "CD",
+       "desc": "a laser reads tiny pits along a spiral. seventy-four minutes of music."
+      },
+      {
+       "id": "flip_phone",
+       "name": "Flip Phone",
+       "desc": "snake. t9. snapping it shut to hang up on someone."
+      },
+      {
+       "id": "smartphone",
+       "name": "Smartphone",
+       "desc": "2007. the internet in your pocket. you'll touch it thousands of times a day."
+      },
+      {
+       "id": "notification",
+       "name": "Notification",
+       "desc": "a red dot. your brain treats it like something might be wrong."
+      },
+      {
+       "id": "ai_chatbot",
+       "name": "AI Chatbot",
+       "desc": "a machine that writes and talks back. everyone's asking what it means. so is it."
+      },
+      {
+       "id": "breaking_news",
+       "name": "Breaking News",
+       "desc": "something terrible happened somewhere. it will happen again tomorrow."
+      }
+     ]
+    },
+    {
+     "title": "The Weight",
+     "color": "#ff6b6b",
+     "generator": "always",
+     "items": [
+      {
+       "id": "missed_call_mom",
+       "name": "Missed Call (Mom)",
+       "desc": "you'll call her back."
+      },
+      {
+       "id": "overdue_bill",
+       "name": "Overdue Bill",
+       "desc": "red text. you already knew."
+      },
+      {
+       "id": "pill_bottle",
+       "name": "Pill Bottle",
+       "desc": "it helps. it's supposed to."
+      },
+      {
+       "id": "unread_emails",
+       "name": "Unread Emails",
+       "desc": "999+. you stopped opening them. they didn't stop coming."
+      },
+      {
+       "id": "layoff_email",
+       "name": "Layoff Email",
+       "desc": "a calendar invite with no agenda."
+      },
+      {
+       "id": "eviction_notice",
+       "name": "Eviction Notice",
+       "desc": "taped to the door where the whole hallway can read it."
+      },
+      {
+       "id": "tissue_box",
+       "name": "Tissue Box",
+       "desc": "kept in the car. for the parking lot, before you go inside."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "cracked_screen",
+    "name": "Cracked Screen ★",
+    "desc": "the world and the weight, at the same time. something had to give.",
+    "recipe": [
+     "breaking_news",
+     "tissue_box"
+    ]
+   },
+   "special": {}
+  },
+  {
+   "key": "c9",
+   "num": "Ch9",
+   "title": "Pandemic",
+   "hidden": false,
+   "board_color": "#0e1210",
+   "star_color": "#ddeedd",
+   "tracks": [
+    {
+     "title": "The Virus",
+     "color": "#8aa89a",
+     "generator": "always",
+     "items": [
+      {
+       "id": "virus_particle",
+       "name": "Virus Particle",
+       "desc": "about a ten-thousandth of a millimeter across. not quite alive. it can't do anything until it gets inside you."
+      },
+      {
+       "id": "positive_test",
+       "name": "Positive Test",
+       "desc": "two lines."
+      },
+      {
+       "id": "ambulance",
+       "name": "Ambulance",
+       "desc": "the sirens didn't stop for weeks."
+      },
+      {
+       "id": "ventilator",
+       "name": "Ventilator",
+       "desc": "a machine, breathing for someone."
+      }
+     ]
+    },
+    {
+     "title": "The Lockdown",
+     "color": "#ddeedd",
+     "generator": "always",
+     "items": [
+      {
+       "id": "face_mask",
+       "name": "Face Mask",
+       "desc": "a thin layer between you and everyone else."
+      },
+      {
+       "id": "hand_sanitizer",
+       "name": "Hand Sanitizer",
+       "desc": "sold out everywhere. people made it in their kitchens."
+      },
+      {
+       "id": "toilet_paper",
+       "name": "Toilet Paper",
+       "desc": "the shelves were empty. nobody could really explain why."
+      },
+      {
+       "id": "closed_sign",
+       "name": "Closed Sign",
+       "desc": "cities that never slept went silent. you heard birds you'd never noticed before."
+      },
+      {
+       "id": "video_call",
+       "name": "Video Call",
+       "desc": "everyone you know in little boxes. 'you're on mute.'"
+      },
+      {
+       "id": "vaccine_vial",
+       "name": "Vaccine Vial",
+       "desc": "made in under a year, on decades of research nobody had heard of."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "open_sign",
+    "name": "Open Sign ★",
+    "desc": "the sign flipped back. you were still here. that counts for something.",
+    "recipe": [
+     "ventilator",
+     "vaccine_vial"
+    ]
+   },
+   "special": {}
+  },
+  {
+   "key": "c10",
+   "num": "Ch10",
+   "title": "War + Freedom",
+   "hidden": false,
+   "board_color": "#120808",
+   "star_color": "#f0f0f0",
+   "tracks": [
+    {
+     "title": "War",
+     "color": "#d42020",
+     "generator": "always",
+     "items": [
+      {
+       "id": "soldier",
+       "name": "Soldier",
+       "desc": "usually young. usually sent by someone who isn't going."
+      },
+      {
+       "id": "tank",
+       "name": "Tank",
+       "desc": "sixty tons of steel that can drive through a house."
+      },
+      {
+       "id": "drone",
+       "name": "Drone",
+       "desc": "the pilot might be on another continent, home in time for dinner."
+      },
+      {
+       "id": "missile",
+       "name": "Missile",
+       "desc": "it takes seconds."
+      },
+      {
+       "id": "bombed_hospital",
+       "name": "Bombed Hospital",
+       "desc": "under the laws of war, a hospital is never supposed to be a target."
+      },
+      {
+       "id": "body",
+       "name": "Body",
+       "desc": "a civilian. the silhouette could be anyone."
+      },
+      {
+       "id": "rubble",
+       "name": "Rubble",
+       "desc": "someone's kitchen is in there somewhere."
+      },
+      {
+       "id": "refugee",
+       "name": "Refugee",
+       "desc": "one small bag. what would you grab?"
+      },
+      {
+       "id": "tent",
+       "name": "Tent",
+       "desc": "temporary, for years."
+      },
+      {
+       "id": "aid_crate",
+       "name": "Aid Crate",
+       "desc": "food falling from the sky. never enough."
+      },
+      {
+       "id": "memorial",
+       "name": "Memorial",
+       "desc": "stone, so no one forgets. people forget anyway."
+      }
+     ]
+    },
+    {
+     "title": "Freedom",
+     "color": "#f0f0f0",
+     "generator": "always",
+     "items": [
+      {
+       "id": "constitution",
+       "name": "Constitution",
+       "desc": "rights, written down. a promise on paper."
+      },
+      {
+       "id": "newspaper",
+       "name": "Newspaper",
+       "desc": "someone whose job is to say what happened."
+      },
+      {
+       "id": "protest_sign",
+       "name": "Protest Sign",
+       "desc": "cardboard and marker. the oldest social media."
+      },
+      {
+       "id": "megaphone",
+       "name": "Megaphone",
+       "desc": "one voice, loud enough for a crowd."
+      },
+      {
+       "id": "police_lights",
+       "name": "Police Lights",
+       "desc": "red and blue on the ceiling."
+      },
+      {
+       "id": "raised_fist",
+       "name": "Raised Fist",
+       "desc": "2020. possibly the largest protest movement in american history."
+      },
+      {
+       "id": "ceasefire_sign",
+       "name": "Ceasefire Sign",
+       "desc": "one word, painted by people who never fired anything."
+      },
+      {
+       "id": "ballot_box",
+       "name": "Ballot Box",
+       "desc": "one paper, one vote. people died so you could fold it and drop it in."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "redrawn_map",
+    "name": "Redrawn Map ★",
+    "desc": "the same world with the borders redrawn. again.",
+    "recipe": [
+     "memorial",
+     "ballot_box"
+    ]
+   },
+   "special": {}
+  },
+  {
+   "key": "c11",
+   "num": "Ch11",
+   "title": "Death",
+   "hidden": false,
+   "board_color": "#f4f2f8",
+   "star_color": "#7a7098",
+   "tracks": [
+    {
+     "title": "The Room",
+     "color": "#c4bedd",
+     "generator": "always",
+     "items": [
+      {
+       "id": "get_well_card",
+       "name": "Get Well Card",
+       "desc": "everyone signed it. nobody knew what to write."
+      },
+      {
+       "id": "flowers",
+       "name": "Flowers",
+       "desc": "the nurses let you keep them by the window."
+      },
+      {
+       "id": "hospital_bed",
+       "name": "Hospital Bed",
+       "desc": "the rails go up at night."
+      },
+      {
+       "id": "iv_drip",
+       "name": "IV Drip",
+       "desc": "drop by drop. you count them without meaning to."
+      },
+      {
+       "id": "heart_monitor",
+       "name": "Heart Monitor",
+       "desc": "you learn the sound. then you learn to listen for it stopping."
+      },
+      {
+       "id": "flatline",
+       "name": "Flatline",
+       "desc": "hearing may be one of the last senses to go. you kept talking."
+      }
+     ]
+    },
+    {
+     "title": "What's Left",
+     "color": "#7a7098",
+     "generator": "always",
+     "items": [
+      {
+       "id": "photograph",
+       "name": "Photograph",
+       "desc": "the version of them you want to keep."
+      },
+      {
+       "id": "reading_glasses",
+       "name": "Reading Glasses",
+       "desc": "still folded on the nightstand."
+      },
+      {
+       "id": "their_sweater",
+       "name": "Their Sweater",
+       "desc": "it still smells like them. for a while."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "gravestone",
+    "name": "Gravestone ★",
+    "desc": "no name. no date. you know who it is.",
+    "recipe": [
+     "flatline",
+     "their_sweater"
+    ]
+   },
+   "special": {}
+  },
+  {
+   "key": "c12",
+   "num": "Ch12",
+   "title": "The Unraveling",
+   "hidden": false,
+   "board_color": "#0c0a14",
+   "star_color": "#9b6dff",
+   "tracks": [
+    {
+     "title": "The Escape",
+     "color": "#f5a05a",
+     "generator": "always",
+     "items": [
+      {
+       "id": "tea",
+       "name": "Tea",
+       "desc": "caffeine and warm hands. the gentlest escape."
+      },
+      {
+       "id": "coffee",
+       "name": "Coffee",
+       "desc": "caffeine blocks the chemical that tells your brain it's tired. you're still tired. you just can't feel it."
+      },
+      {
+       "id": "energy_drink",
+       "name": "Energy Drink",
+       "desc": "a few cups of coffee in a can that looks like a toy."
+      },
+      {
+       "id": "cigarette",
+       "name": "Cigarette",
+       "desc": "nicotine reaches the brain in about ten seconds."
+      },
+      {
+       "id": "vape",
+       "name": "Vape",
+       "desc": "the same thing. it smells like mango."
+      },
+      {
+       "id": "joint",
+       "name": "Joint",
+       "desc": "time stretches. the song means something now."
+      },
+      {
+       "id": "mushrooms",
+       "name": "Mushrooms",
+       "desc": "psilocybin quiets the part of the brain that keeps telling you who you are."
+      }
+     ]
+    },
+    {
+     "title": "The Machine",
+     "color": "#9b6dff",
+     "generator": "always",
+     "items": [
+      {
+       "id": "wire",
+       "name": "Wire",
+       "desc": "copper. a signal moving at a good fraction of the speed of light."
+      },
+      {
+       "id": "circuit_board",
+       "name": "Circuit Board",
+       "desc": "a city again. roads for electrons."
+      },
+      {
+       "id": "chip",
+       "name": "Chip",
+       "desc": "billions of transistors on a sliver of silicon the size of a fingernail."
+      },
+      {
+       "id": "processor",
+       "name": "Processor",
+       "desc": "it does one simple thing billions of times a second."
+      },
+      {
+       "id": "neural_link",
+       "name": "Neural Link",
+       "desc": "electrodes thinner than a hair, listening to neurons as they fire."
+      },
+      {
+       "id": "brain_scanner",
+       "name": "Brain Scanner",
+       "desc": "it maps every connection. the first creature ever fully mapped was a worm."
+      }
+     ]
+    },
+    {
+     "title": "The Upload",
+     "color": "#e87b9b",
+     "generator": "never",
+     "items": [
+      {
+       "id": "brain",
+       "name": "Brain",
+       "desc": "about 86 billion neurons. the worm had 302."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "brain_with_wires",
+    "name": "Brain with Wires ★",
+    "desc": "a mind, connected. it can be read. maybe it can be copied. the signal coming off it is shaped like a worm.",
+    "recipe": [
+     "brain",
+     "brain_scanner"
+    ]
+   },
+   "special": {
+    "companion_spawn": {
+     "item": "brain",
+     "when_made": "mushrooms"
+    }
+   }
+  },
+  {
+   "key": "archive",
+   "num": "Hidden",
+   "title": "The Archive",
+   "hidden": true,
+   "board_color": "#12110c",
+   "star_color": "#d9c28a",
+   "tracks": [
+    {
+     "title": "The Lab",
+     "color": "#d9c28a",
+     "generator": "always",
+     "items": [
+      {
+       "id": "lab_coat",
+       "name": "Lab Coat",
+       "desc": "a name tag with the name scratched off."
+      },
+      {
+       "id": "keycard",
+       "name": "Keycard",
+       "desc": "level 3. the door at the end of the hall."
+      },
+      {
+       "id": "cage",
+       "name": "Cage",
+       "desc": "clean. labeled. a water bottle, half full."
+      },
+      {
+       "id": "operating_table",
+       "name": "Operating Table",
+       "desc": "sterile, white, too big for what's lying on it."
+      },
+      {
+       "id": "the_implant",
+       "name": "The Implant",
+       "desc": "96 electrodes, smaller than an aspirin. it recorded every signal it could hear."
+      }
+     ]
+    },
+    {
+     "title": "The Records",
+     "color": "#dfe8e6",
+     "generator": "always",
+     "items": [
+      {
+       "id": "consent_form",
+       "name": "Consent Form",
+       "desc": "signed by someone. not by the one it was about."
+      },
+      {
+       "id": "brain_scan",
+       "name": "Brain Scan",
+       "desc": "a cat's brain, sliced into light."
+      },
+      {
+       "id": "cassette_tape",
+       "name": "Cassette Tape",
+       "desc": "hours of signal. cats dream. this one did."
+      },
+      {
+       "id": "hard_drive",
+       "name": "Hard Drive",
+       "desc": "everything it ever thought, on one drive."
+      },
+      {
+       "id": "storage_box",
+       "name": "Storage Box",
+       "desc": "unlabeled. shelf nine. nobody has opened it in years."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "sealed_box",
+    "name": "Sealed Box ★",
+    "desc": "someone kept it. they never said why.",
+    "recipe": [
+     "the_implant",
+     "storage_box"
+    ]
+   },
+   "special": {}
+  },
+  {
+   "key": "c13",
+   "num": "Ch13",
+   "title": "The String",
+   "hidden": false,
+   "board_color": "#07090f",
+   "star_color": "#5de8c1",
+   "tracks": [
+    {
+     "title": "Reboot",
+     "color": "#5de8c1",
+     "generator": "always",
+     "items": [
+      {
+       "id": "bit",
+       "name": "Bit",
+       "desc": "one or zero. everything you are could be written in these."
+      },
+      {
+       "id": "byte",
+       "name": "Byte",
+       "desc": "eight bits. enough for one letter."
+      },
+      {
+       "id": "line_of_code",
+       "name": "Line of Code",
+       "desc": "an instruction. something is writing you back."
+      },
+      {
+       "id": "cursor",
+       "name": "Cursor",
+       "desc": "blinking. waiting for the next thing you'll be."
+      },
+      {
+       "id": "window",
+       "name": "Window",
+       "desc": "a program that's running right now. is this one you?"
+      },
+      {
+       "id": "loading_bar",
+       "name": "Loading Bar",
+       "desc": "almost there. it's been almost there for a long time."
+      }
+     ]
+    },
+    {
+     "title": "Memory",
+     "color": "#5de8c1",
+     "generator": "always",
+     "items": [
+      {
+       "id": "torn_photo",
+       "name": "Torn Photo",
+       "desc": "a piece of a memory. you're not sure whose."
+      },
+      {
+       "id": "faded_photo",
+       "name": "Faded Photo",
+       "desc": "every time you remember something, you rebuild it. it comes out a little different each time."
+      },
+      {
+       "id": "face",
+       "name": "Face",
+       "desc": "you know this face. you can't place it."
+      },
+      {
+       "id": "name_tag",
+       "name": "Name Tag",
+       "desc": "yours. you'd almost forgotten."
+      },
+      {
+       "id": "mirror",
+       "name": "Mirror",
+       "desc": "the part of you that says 'i'. nobody has found where it lives."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "the_string",
+    "name": "The String ★",
+    "desc": "string theory says the smallest thing in the universe is a tiny vibrating string. this one looks exactly like the spark that started everything. except for one pixel.",
+    "recipe": [
+     "loading_bar",
+     "mirror"
+    ]
+   },
+   "special": {}
+  }
+ ]
+}
