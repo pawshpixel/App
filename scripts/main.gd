@@ -8,6 +8,11 @@ const FONT_LIGHT := preload("res://assets/fonts/JetBrainsMono-ExtraLight.ttf")
 const FONT_ITALIC := preload("res://assets/fonts/JetBrainsMono-Italic.ttf")
 const TEAL := Color("5de8c1")
 const VIOLET := Color("9b6dff")
+const PACING_PATH := "res://data/pacing.json"
+const PACING_DEFAULTS := {
+	"start_cells": 9, "unlock_per_new_item": 3, "upgrade_chance": 0.08, "static_chance": 0.15, "recycle": true,
+	"max_chain_depth": 6,
+}
 
 var frame: Control
 var background: ColorRect
@@ -31,9 +36,13 @@ var _companion_spawned := false
 var _unlocked_tracks := {}
 var _busy := false
 var _chapter_done := false
+var _connected := 0
+var pacing: Dictionary = {}
+var pacing_mode := "mystery"
 
 
 func _ready() -> void:
+	_load_pacing()
 	background = ColorRect.new()
 	background.color = Color("07090f")
 	background.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -53,6 +62,20 @@ func _ready() -> void:
 		_build_dev_bar()
 	_build_overlay()
 	_show_opening_screen()
+
+
+func _load_pacing() -> void:
+	var parsed = JSON.parse_string(FileAccess.get_file_as_string(PACING_PATH))
+	pacing = parsed if typeof(parsed) == TYPE_DICTIONARY else {}
+	pacing_mode = pacing.get("mode", "mystery")
+
+
+## A pacing knob for the current chapter: its override in pacing.json, else the default.
+func _pace(key: String):
+	var per: Dictionary = pacing.get("chapters", {}).get(chapter.get("key", ""), {})
+	if per.has(key):
+		return per[key]
+	return pacing.get("defaults", {}).get(key, PACING_DEFAULTS[key])
 
 
 func _center_frame() -> void:
@@ -98,6 +121,8 @@ func _build_board() -> void:
 	board.position = Vector2((W - board.size.x) / 2.0, 480)
 	board.item_tapped.connect(_on_item_tapped)
 	board.merged.connect(_on_merged)
+	board.static_cleared.connect(_on_static_cleared)
+	board.dropped_outside.connect(_on_dropped_outside)
 
 
 func _build_generator_bar() -> void:
@@ -118,7 +143,7 @@ func _build_dev_bar() -> void:
 	bar.position = Vector2(50, 1812)
 	bar.add_theme_constant_override("separation", 14)
 	frame.add_child(bar)
-	for pair in [["skip ▶", _dev_skip], ["auto-merge", _dev_auto], ["loop +1", _dev_loop], ["reset", _dev_reset]]:
+	for pair in [["skip ▶", _dev_skip], ["auto-merge", _dev_auto], ["pacing", _dev_pacing], ["loop +1", _dev_loop], ["reset", _dev_reset]]:
 		var b := Button.new()
 		b.text = pair[0]
 		b.add_theme_font_override("font", FONT_LIGHT)
@@ -226,86 +251,187 @@ func start_chapter(index: int) -> void:
 	_taps = 0
 	_spawned_first = 0
 	_merges = 0
+	_connected = 0
 	_companion_spawned = false
 	_unlocked_tracks = {}
 	_chapter_done = false
 	companion.covered = false
 
 	board.clear_board()
+	board.set_open_count(int(_pace("start_cells")))
 	info.clear_panel()
 	var bg := Color(chapter["board_color"])
 	background.color = bg
 	board.set_grid_color(Color("c4bedd") if bg.get_luminance() > 0.5 else Color("2a2440"))
 	chapter_label.text = "%s — %s" % [chapter["num"], chapter["title"]]
-	counter_label.text = "0" if chapter["special"].has("counter") else ""
+	var first_id: String = chapter["tracks"][0]["items"][0]["id"]
+	for i in int(chapter["special"].get("prefill", 0)):
+		if board.spawn(first_id) != -1:
+			_spawned_first += 1
+	if _spawned_first > 0:
+		LoopState.discover(first_id)
+	_update_counter()
 	_rebuild_generators()
 	await _title_card("%s\n%s" % [chapter["num"], chapter["title"]])
+
+
+func _limit() -> int:
+	var limits: Dictionary = chapter["special"].get("generator_limit", {})
+	return limits.get(str(mini(LoopState.loop, 2)), -1)
+
+
+func _update_counter() -> void:
+	if not chapter["special"].has("counter"):
+		counter_label.text = ""
+		return
+	counter_label.text = "connected: %d / %d" % [_connected, LoopState.neuron_count()]
+
+
+## Tracks the generator can still give items for (not finished, not hidden until the companion acts).
+func _available_tracks() -> Array:
+	var out: Array = []
+	var firsts := ItemDB.first_items(LoopState.chapter_index)
+	for i in firsts.size():
+		var f: Dictionary = firsts[i]
+		if f["generator"] == "never" or (f["generator"] == "after_companion" and not _unlocked_tracks.has(i)):
+			continue
+		if not chapter["special"].get("collapse_final", false) and _track_done(f):
+			continue
+		f["index"] = i
+		out.append(f)
+	return out
+
+
+func _track_done(rule: Dictionary) -> bool:
+	return board.count_of(rule["end"]) >= rule["need"] \
+			or (rule["result"] != "" and board.find_cell(rule["result"]) != -1) \
+			or (rule["result"] == "" and _made.has(rule["end"]))
+
+
+func _generator_button(text: String, col: Color) -> Button:
+	var b := Button.new()
+	b.text = text
+	b.custom_minimum_size = Vector2(0, 130)
+	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	b.add_theme_font_override("font", FONT_BOLD)
+	b.add_theme_font_size_override("font_size", 26)
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = col.darkened(0.78)
+	sb.border_color = col
+	sb.set_border_width_all(3)
+	sb.set_corner_radius_all(24)
+	for state in ["normal", "hover", "pressed", "disabled"]:
+		b.add_theme_stylebox_override(state, sb)
+	b.add_theme_color_override("font_color", Color("e8e4f0"))
+	generator_bar.add_child(b)
+	return b
 
 
 func _rebuild_generators() -> void:
 	for c in generator_bar.get_children():
 		c.queue_free()
-	var firsts := ItemDB.first_items(LoopState.chapter_index)
-	for i in firsts.size():
-		var f: Dictionary = firsts[i]
-		var gen: String = f["generator"]
-		if gen == "never" or (gen == "after_companion" and not _unlocked_tracks.has(i)):
-			continue
-		var b := Button.new()
-		b.text = "+ " + ItemDB.item(f["id"])["name"]
-		b.custom_minimum_size = Vector2(0, 130)
-		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		b.add_theme_font_override("font", FONT_BOLD)
-		b.add_theme_font_size_override("font_size", 26)
-		var sb := StyleBoxFlat.new()
-		sb.bg_color = (f["color"] as Color).darkened(0.78)
-		sb.border_color = f["color"]
-		sb.set_border_width_all(3)
-		sb.set_corner_radius_all(24)
-		b.add_theme_stylebox_override("normal", sb)
-		b.add_theme_stylebox_override("hover", sb)
-		b.add_theme_stylebox_override("pressed", sb)
-		b.add_theme_color_override("font_color", Color("e8e4f0"))
-		b.pressed.connect(_on_generator.bind(f["id"], b))
-		b.set_meta("rule", f)
-		generator_bar.add_child(b)
+	var mystery: bool = pacing_mode == "mystery" and not chapter["special"].has("generator_limit")
+	if mystery:
+		var b := _generator_button("", Color(chapter["star_color"]))
+		b.set_meta("mystery", true)
+		b.pressed.connect(_on_mystery_generator)
+	else:
+		var firsts := ItemDB.first_items(LoopState.chapter_index)
+		for i in firsts.size():
+			var f: Dictionary = firsts[i]
+			if f["generator"] == "never" or (f["generator"] == "after_companion" and not _unlocked_tracks.has(i)):
+				continue
+			var b := _generator_button("", f["color"])
+			b.set_meta("rule", f)
+			b.pressed.connect(_on_generator.bind(f["id"]))
 	_refresh_generators()
 
 
-## Switches a generator off while its track is finished (its last item is on the board),
-## once the tutorial limit is reached, or once the chapter's ★ exists.
+## Updates generator labels and switches them off when there's nothing left to give:
+## a finished track, the tutorial's 302 used up, or the chapter's ★ already made.
 func _refresh_generators() -> void:
-	var limits: Dictionary = chapter["special"].get("generator_limit", {})
-	var limit: int = limits.get(str(mini(LoopState.loop, 2)), -1)
+	var limit := _limit()
+	var remaining := limit - _spawned_first
 	var final_made := _made.has(chapter["final"]["id"])
 	for b in generator_bar.get_children():
 		if not b is Button or b.is_queued_for_deletion():
 			continue
+		if b.has_meta("mystery"):
+			b.text = chapter["source"]
+			b.disabled = final_made or _available_tracks().is_empty()
+			continue
 		var rule: Dictionary = b.get_meta("rule")
-		var track_done: bool = board.count_of(rule["end"]) >= rule["need"] \
-				or (rule["result"] != "" and board.find_cell(rule["result"]) != -1) \
-				or (rule["result"] == "" and _made.has(rule["end"]))
-		var at_limit := limit != -1 and _spawned_first >= limit
-		b.disabled = final_made or track_done or at_limit
+		var name_text: String = ItemDB.item(rule["id"])["name"]
+		b.text = "+ %s" % name_text if limit == -1 else "+ %s   ·   %d left" % [name_text, maxi(0, remaining)]
+		var done: bool = _track_done(rule) and not chapter["special"].get("collapse_final", false)
+		b.disabled = final_made or done or (limit != -1 and remaining <= 0)
+	for b in generator_bar.get_children():
+		if b is Button:
+			b.modulate.a = 0.35 if b.disabled else 1.0
 
 
-func _on_generator(first_id: String, button: Button) -> void:
+func _on_generator(first_id: String) -> void:
 	if _busy or _chapter_done:
 		return
-	var limits: Dictionary = chapter["special"].get("generator_limit", {})
-	var limit: int = limits.get(str(mini(LoopState.loop, 2)), -1)
+	var limit := _limit()
 	if limit != -1 and _spawned_first >= limit:
-		button.disabled = true
 		return
 	if board.spawn(first_id) == -1:
 		return
 	LoopState.discover(first_id)
 	_spawned_first += 1
+	_after_generator_tap()
+
+
+## One themed generator per chapter: a random item from any unfinished track,
+## sometimes one tier higher, sometimes Static that has to be cancelled out.
+func _on_mystery_generator() -> void:
+	if _busy or _chapter_done:
+		return
+	var tracks := _available_tracks()
+	if tracks.is_empty():
+		return
+	var id := "static"
+	if randf() >= float(_pace("static_chance")):
+		var track: Dictionary = ItemDB.chapters[LoopState.chapter_index]["tracks"][tracks[randi() % tracks.size()]["index"]]
+		# Merging doubles each step, so an 11-item chain would need 1,024 of its first item.
+		# Chains longer than max_chain_depth also drop items partway up, evenly across the bottom tiers.
+		var n: int = track["items"].size()
+		var top := maxi(0, n - int(_pace("max_chain_depth")))
+		var tier := randi() % (top + 1)
+		if randf() < float(_pace("upgrade_chance")) and tier + 1 < n - 1:
+			tier += 1
+		id = track["items"][tier]["id"]
+	if board.spawn(id) == -1:
+		return
+	LoopState.discover(id)
+	_after_generator_tap()
+
+
+func _after_generator_tap() -> void:
 	_taps += 1
 	_refresh_generators()
 	var cs: Dictionary = chapter["special"].get("companion_spawn", {})
 	if cs.has("after_taps") and not _companion_spawned and _taps >= cs["after_taps"]:
 		_companion_places(cs["item"])
+	_check_collapse()
+
+
+func _on_static_cleared(_cell: int) -> void:
+	_refresh_generators()
+
+
+## Dropping an item onto the generator bar sends it back into the void (the only way to clear clutter).
+func _on_dropped_outside(cell: int, global_point: Vector2) -> void:
+	if not bool(_pace("recycle")) or _busy or _chapter_done:
+		return
+	if not generator_bar.get_global_rect().grow(20).has_point(global_point):
+		return
+	var id: String = board.cells[cell].id
+	if ItemDB.item(id).get("star", false):
+		return
+	board.remove_at(cell)
+	_refresh_generators()
 
 
 func _companion_places(id: String) -> void:
@@ -329,13 +455,16 @@ func _on_item_tapped(id: String) -> void:
 
 func _on_merged(result: String, _cell: int) -> void:
 	LoopState.discover(result)
+	if not _made.has(result):
+		board.unlock(int(_pace("unlock_per_new_item")))
 	_made[result] = true
 	_merges += 1
 	info.show_item(result)
 	var sp: Dictionary = chapter["special"]
 
-	if sp.has("counter"):
-		counter_label.text = str(roundi(LoopState.neuron_count() * _merges / 15.0))
+	if sp.has("counter") and result == "neuron_pair":
+		_connected += 2
+		_update_counter()
 	if sp.get("eye_trigger", "") == result:
 		if LoopState.loop == 1 and not LoopState.eye_opened:
 			LoopState.eye_opened = true
@@ -355,9 +484,46 @@ func _on_merged(result: String, _cell: int) -> void:
 			companion.covered = false
 
 	_refresh_generators()
+	_check_collapse()
 	var final_id: String = chapter["final"]["id"]
 	if _made.has(final_id) and _requirements_met():
 		_complete_chapter()
+
+
+## Tutorial: once every neuron is out and every one that can pair has paired
+## (all 302 in Loop 1; all but one in Loop 2), the whole board flows together into the worm.
+func _check_collapse() -> void:
+	if not chapter["special"].get("collapse_final", false) or _chapter_done or _made.has(chapter["final"]["id"]):
+		return
+	var leftover := 1 if LoopState.loop >= 2 else 0
+	if _spawned_first < _limit() or board.count_of("neuron") > leftover:
+		return
+	_collapse_to_final()
+
+
+func _collapse_to_final() -> void:
+	_busy = true
+	board.locked = true
+	var center_cell := (Board.ROWS / 2) * Board.COLS + Board.COLS / 2
+	var target := board.cell_origin(center_cell)
+	var tw := create_tween().set_parallel(true)
+	for i in board.cells.size():
+		var t: Tile = board.cells[i]
+		if t == null or t.id == "neuron":
+			continue
+		tw.tween_property(t, "position", target, 0.9).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		tw.tween_property(t, "modulate:a", 0.0, 0.9)
+	await tw.finished
+	for i in board.cells.size():
+		if board.cells[i] != null and board.cells[i].id != "neuron":
+			board.remove_at(i)
+	var final_id: String = chapter["final"]["id"]
+	if board.cells[center_cell] != null:
+		center_cell = board.empty_cells()[0]
+	board.spawn(final_id, center_cell)
+	_busy = false
+	board.locked = false
+	_on_merged(final_id, center_cell)
 
 
 func _requirements_met() -> bool:
@@ -475,6 +641,15 @@ func _dev_skip() -> void:
 func _dev_auto() -> void:
 	if not _busy:
 		board.auto_merge_step()
+
+
+## DEV: switches between one mystery generator and one button per track, then restarts the chapter.
+func _dev_pacing() -> void:
+	if _busy or chapter.is_empty():
+		return
+	pacing_mode = "per_track" if pacing_mode == "mystery" else "mystery"
+	print("pacing mode: ", pacing_mode)
+	start_chapter(LoopState.chapter_index)
 
 
 func _dev_loop() -> void:

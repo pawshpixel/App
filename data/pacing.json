@@ -1,0 +1,15 @@
+{
+	"_help": "Pacing knobs. Change a number, save, press F5. See README for what each one does. 'chapters' overrides the defaults for one chapter (keys: tut, c1 ... c13).",
+	"mode": "mystery",
+	"defaults": {
+		"start_cells": 9,
+		"unlock_per_new_item": 3,
+		"upgrade_chance": 0.08,
+		"static_chance": 0.15,
+		"max_chain_depth": 6,
+		"recycle": true
+	},
+	"chapters": {
+		"tut": { "start_cells": 56, "static_chance": 0.0, "upgrade_chance": 0.0, "recycle": false }
+	}
+}

@@ -25,6 +25,24 @@ Everything plays with placeholder squares, so you can draw into a game that alre
 **DEV buttons** (bottom of the screen): `skip ▶` finishes the chapter, `auto-merge` does one merge for you,
 `loop +1` jumps to the next loop, `reset` wipes progress. Turn them off with `DEV_MODE` in `scripts/loop_state.gd`.
 
+## Pacing (how long chapters take)
+
+All the numbers live in `data/pacing.json`. Change one, save, press F5.
+
+| Knob | What it does |
+| --- | --- |
+| `mode` | `mystery`: one themed generator per chapter (The Void, Tide Pool…) that drops a random item. `per_track`: one button per chain (the old style). The **pacing** dev button flips between them while you play. |
+| `start_cells` | How many cells are lit when a chapter starts. The rest is static until you discover things. |
+| `unlock_per_new_item` | Cells that light up each time you make an item for the first time in that chapter. |
+| `static_chance` | How often the generator drops Static. Two Static cancel out. |
+| `upgrade_chance` | How often the generator drops something one step up a chain. |
+| `max_chain_depth` | Chains longer than this also drop items partway up, so an 11-item chain doesn't need 1,024 taps. |
+| `recycle` | Drag an item onto the generator to throw it away. |
+
+Put any of these under `"chapters"` → `"c10"` (for example) to change just one chapter.
+
+**The tutorial** works differently on purpose: the board starts half full, the generator holds exactly 302 Neurons (303 in Loop 2), and when every one that can pair has paired, the board flows together into The Worm ★.
+
 ## Where things live
 
 | Path | What |

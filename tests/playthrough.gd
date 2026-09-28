@@ -28,12 +28,14 @@ func _ready() -> void:
 
 func _play_loop(loop_number: int) -> bool:
 	var seen: Array = []
+	var actions := {}
 	var frames := 0
 	while frames < 20000:
 		frames += 1
 		await get_tree().process_frame
 		if main.choice_box.visible:
 			print("loop %d ended after chapters: %s" % [loop_number, ", ".join(PackedStringArray(seen))])
+			print("  taps + merges per chapter: ", actions)
 			return _check(seen.size() == 14, "loop %d played 14 chapters" % loop_number)
 		if main._busy or main.board.locked or main.chapter.is_empty():
 			continue
@@ -46,7 +48,13 @@ func _play_loop(loop_number: int) -> bool:
 				print("FAIL: companion should cover its eye during the war")
 				return false
 		if main.board.auto_merge_step():
+			actions[key] = actions.get(key, 0) + 1
 			continue
+		if main.board.empty_cells().is_empty():
+			var junk: int = main.board.find_cell("static")
+			if junk != -1:
+				main.board.remove_at(junk)
+				continue
 		var buttons: Array = []
 		for b in main.generator_bar.get_children():
 			if b is Button and not b.disabled and not b.is_queued_for_deletion():
@@ -55,6 +63,7 @@ func _play_loop(loop_number: int) -> bool:
 			continue
 		_gen_turn += 1
 		(buttons[_gen_turn % buttons.size()] as Button).pressed.emit()
+		actions[key] = actions.get(key, 0) + 1
 	print("FAIL: loop %d timed out in chapter %s" % [loop_number, main.chapter.get("key", "?")])
 	return false
 

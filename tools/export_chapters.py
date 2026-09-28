@@ -38,8 +38,14 @@ BOARD_COLORS = {
     "c5": "#12100a", "c6": "#0a0e16", "c7": "#16110a", "c8": "#0e0c16", "c9": "#0e1210",
     "c10": "#120808", "c11": "#f4f2f8", "c12": "#0c0a14", "archive": "#12110c", "c13": "#07090f",
 }
+# The one mystery generator each chapter uses when pacing mode is "mystery".
+SOURCES = {
+    "tut": "Neuron", "c1": "The Void", "c2": "Tide Pool", "c3": "The Sky", "c4": "Campfire",
+    "c5": "Workshop", "c6": "Crossroads", "c7": "Toy Chest", "c8": "Phone", "c9": "Front Door",
+    "c10": "Border", "c11": "Waiting Room", "c12": "Nightstand", "archive": "Filing Cabinet", "c13": "Terminal",
+}
 SPECIAL = {
-    "tut": {"generator_limit": {"1": 16, "2": 17}, "counter": True},
+    "tut": {"generator_limit": {"1": 302, "2": 303}, "counter": True, "prefill": 28, "collapse_final": True},
     "c7": {"companion_spawn": {"item": "paw_print", "after_taps": 6}, "requires": ["cat"], "eye_trigger": "cat"},
     "c12": {"companion_spawn": {"item": "brain", "when_made": "mushrooms"}},
 }
@@ -51,6 +57,8 @@ def slug(name: str) -> str:
 
 
 def recipe(text: str) -> list:
+    if "+" not in text:
+        return []  # formed by a special rule (the tutorial's worm), not a two-item merge
     a, b = [p.strip() for p in text.split("+")]
     return [slug(a), slug(b)]
 
@@ -69,6 +77,7 @@ for c in CHAPTERS:
     ch = {
         "key": c["key"], "num": c["num"], "title": c["title"], "hidden": bool(c.get("hidden")),
         "board_color": BOARD_COLORS[c["key"]], "star_color": STAR_COLORS[c["key"]],
+        "source": SOURCES[c["key"]],
         "tracks": tracks,
         "final": {"id": slug(fn), "name": fn, "desc": fd, "recipe": recipe(fr)},
         "special": SPECIAL.get(c["key"], {}),

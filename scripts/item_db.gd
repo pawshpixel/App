@@ -18,6 +18,11 @@ func _ready() -> void:
 	chapters = parsed["chapters"]
 	for ci in chapters.size():
 		_index_chapter(ci, chapters[ci])
+	items["static"] = {
+		"id": "static", "name": "Static", "chapter": 0, "color": Color("5a5560"), "star": false,
+		"desc": "noise. the simulation hasn't decided what this is yet. two of them cancel out.",
+		"next": "", "path": ["static"],
+	}
 	items["neuron_303"] = {
 		"id": "neuron_303", "name": "Neuron 303", "chapter": 0, "color": Color("f28b82"), "star": false,
 		"desc": "no pair. no place in the worm. it isn't yours. it came in with you.",
@@ -55,7 +60,8 @@ func _index_chapter(ci: int, ch: Dictionary) -> void:
 			"color": Color(ch["star_color"]), "star": key == "final", "next": "",
 			"path": extra_path if key == "extra" and not extra_path.is_empty() else [f["id"]],
 		}
-		recipes[_pair(f["recipe"][0], f["recipe"][1])] = f["id"]
+		if f["recipe"].size() == 2:
+			recipes[_pair(f["recipe"][0], f["recipe"][1])] = f["id"]
 
 
 func _pair(a: String, b: String) -> String:

@@ -7,6 +7,7 @@
    "hidden": false,
    "board_color": "#07090f",
    "star_color": "#e87b9b",
+   "source": "Neuron",
    "tracks": [
     {
      "title": "The Worm",
@@ -32,6 +33,11 @@
        "id": "nerve_ring",
        "name": "Nerve Ring",
        "desc": "the worm's brain is a ring wrapped around its throat. everything it knows passes through here."
+      },
+      {
+       "id": "nerve_cord",
+       "name": "Nerve Cord",
+       "desc": "the worm's main wire runs along its belly, from head to tail. signals travel both ways."
       }
      ]
     }
@@ -39,18 +45,17 @@
    "final": {
     "id": "the_worm",
     "name": "The Worm ★",
-    "desc": "c. elegans. one millimeter long. 302 neurons, every one mapped. in 2014 its wiring was loaded into a lego robot, and the robot moved like a worm.",
-    "recipe": [
-     "nerve_ring",
-     "nerve_ring"
-    ]
+    "desc": "c. elegans. one millimeter long. 302 neurons, every one mapped. you connected all of them. in 2014 its wiring was loaded into a lego robot, and the robot moved like a worm.",
+    "recipe": []
    },
    "special": {
     "generator_limit": {
-     "1": 16,
-     "2": 17
+     "1": 302,
+     "2": 303
     },
-    "counter": true
+    "counter": true,
+    "prefill": 28,
+    "collapse_final": true
    }
   },
   {
@@ -60,6 +65,7 @@
    "hidden": false,
    "board_color": "#0b0a1c",
    "star_color": "#ffd98a",
+   "source": "The Void",
    "tracks": [
     {
      "title": "Stars",
@@ -139,6 +145,7 @@
    "hidden": false,
    "board_color": "#07141a",
    "star_color": "#d4a03a",
+   "source": "Tide Pool",
    "tracks": [
     {
      "title": "Life",
@@ -218,6 +225,7 @@
    "hidden": false,
    "board_color": "#140c0a",
    "star_color": "#c8e8ff",
+   "source": "The Sky",
    "tracks": [
     {
      "title": "The End",
@@ -292,6 +300,7 @@
    "hidden": false,
    "board_color": "#140e08",
    "star_color": "#f5a05a",
+   "source": "Campfire",
    "tracks": [
     {
      "title": "A Life",
@@ -381,6 +390,7 @@
    "hidden": false,
    "board_color": "#12100a",
    "star_color": "#c8a45a",
+   "source": "Workshop",
    "tracks": [
     {
      "title": "Power",
@@ -465,6 +475,7 @@
    "hidden": false,
    "board_color": "#0a0e16",
    "star_color": "#c8d8f0",
+   "source": "Crossroads",
    "tracks": [
     {
      "title": "The City",
@@ -564,6 +575,7 @@
    "hidden": false,
    "board_color": "#16110a",
    "star_color": "#f0c060",
+   "source": "Toy Chest",
    "tracks": [
     {
      "title": "Growing Up",
@@ -703,6 +715,7 @@
    "hidden": false,
    "board_color": "#0e0c16",
    "star_color": "#ff6b6b",
+   "source": "Phone",
    "tracks": [
     {
      "title": "The Screen",
@@ -812,6 +825,7 @@
    "hidden": false,
    "board_color": "#0e1210",
    "star_color": "#ddeedd",
+   "source": "Front Door",
    "tracks": [
     {
      "title": "The Virus",
@@ -896,6 +910,7 @@
    "hidden": false,
    "board_color": "#120808",
    "star_color": "#f0f0f0",
+   "source": "Border",
    "tracks": [
     {
      "title": "War",
@@ -1025,6 +1040,7 @@
    "hidden": false,
    "board_color": "#f4f2f8",
    "star_color": "#7a7098",
+   "source": "Waiting Room",
    "tracks": [
     {
      "title": "The Room",
@@ -1104,6 +1120,7 @@
    "hidden": false,
    "board_color": "#0c0a14",
    "star_color": "#9b6dff",
+   "source": "Nightstand",
    "tracks": [
     {
      "title": "The Escape",
@@ -1220,6 +1237,7 @@
    "hidden": true,
    "board_color": "#12110c",
    "star_color": "#d9c28a",
+   "source": "Filing Cabinet",
    "tracks": [
     {
      "title": "The Lab",
@@ -1304,6 +1322,7 @@
    "hidden": false,
    "board_color": "#07090f",
    "star_color": "#5de8c1",
+   "source": "Terminal",
    "tracks": [
     {
      "title": "Reboot",

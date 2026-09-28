@@ -4,21 +4,22 @@
 
 CHAPTERS = [
 dict(
-  key="tut", num="Tutorial", title="The Worm", time=15, stage="Stage 1", color="teal",
+  key="tut", num="Tutorial", title="The Worm", time=20, stage="Stage 1", color="teal",
   story=[
-    "A black screen and a handful of glowing cells. You drag one onto another, and they connect. You keep going until the pieces become a small, simple, living thing. Nobody tells you what it is.",
-    "A counter in the top panel climbs as you merge and lands on <strong>302</strong> when the worm is finished.",
+    "A black screen, half full of glowing cells. You drag one onto another, and they connect. The counter at the top reads <strong>connected: 0 / 302</strong>. You connect every single one, by hand.",
+    "When the last neuron connects, everything on the board flows together into one small, simple, living thing. Nobody tells you what it is. You just built all 302 of its neurons.",
   ],
   tracks=[dict(code="00", tag="worm", title="The Worm", items=[
     ("Neuron", "one cell that carries a signal. alone, it can't do anything."),
     ("Neuron Pair", "two neurons touching. the gap between them is a synapse. the worm has about 7,000 of these. you have around 100 trillion."),
     ("Nerve Bundle", "neurons wired together. touch the worm's nose and this is what makes it back away."),
     ("Nerve Ring", "the worm's brain is a ring wrapped around its throat. everything it knows passes through here."),
+    ("Nerve Cord", "the worm's main wire runs along its belly, from head to tail. signals travel both ways."),
   ])],
-  final=("The Worm ★", "Nerve Ring + Nerve Ring",
-         "c. elegans. one millimeter long. 302 neurons, every one mapped. in 2014 its wiring was loaded into a lego robot, and the robot moved like a worm."),
+  final=("The Worm ★", "every neuron connected",
+         "c. elegans. one millimeter long. 302 neurons, every one mapped. you connected all of them. in 2014 its wiring was loaded into a lego robot, and the robot moved like a worm."),
   companion="In the corner of the top panel with its <strong>eye closed</strong>. It breathes slowly, like something sleeping, and its traces pulse dimly about once every four seconds.",
-  mechanic="The generator gives exactly 16 neurons in Loop 1. They pair off perfectly: 16 → 8 → 4 → 2 → 1 worm, with nothing left over. <strong>From Loop 2 on it gives 17.</strong> See section 04.",
+  mechanic="The board starts half full of Neurons, and the generator holds the rest: <strong>exactly 302 in Loop 1</strong>. 302 is even, so every neuron finds a partner. When the last one connects, everything left on the board flows together into The Worm ★. <strong>From Loop 2 on there are 303.</strong> One can never pair. See section 04.",
 ),
 dict(
   key="c1", num="Ch1", title="The Big Bang", time=30, stage="Stage 1", color="teal",

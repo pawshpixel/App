@@ -19,10 +19,16 @@ func _ready() -> void:
 	await _shot(out_dir + "/0_opening.png")
 	main._on_enter()
 	await _wait_ready()
-	for i in 12:
+	for i in 40:
 		await _step()
 	main._on_item_tapped("neuron_pair")
 	await _shot(out_dir + "/1_tutorial.png")
+
+	main.start_chapter(1)
+	await _wait_ready()
+	for i in 14:
+		await _step()
+	await _shot(out_dir + "/3_big_bang_board.png")
 
 	main.start_chapter(7)
 	await _wait_ready()
