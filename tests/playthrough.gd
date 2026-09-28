@@ -29,7 +29,7 @@ func _ready() -> void:
 func _play_loop(loop_number: int) -> bool:
 	var seen: Array = []
 	var frames := 0
-	while frames < 60000:
+	while frames < 20000:
 		frames += 1
 		await get_tree().process_frame
 		if main.choice_box.visible:
@@ -40,6 +40,7 @@ func _play_loop(loop_number: int) -> bool:
 		var key: String = main.chapter["key"]
 		if seen.is_empty() or seen[-1] != key:
 			seen.append(key)
+			print("  chapter ", key)
 		if key == "c10" and main._made.has("bombed_hospital") and not main._made.has("memorial"):
 			if not main.companion.covered:
 				print("FAIL: companion should cover its eye during the war")

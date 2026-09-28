@@ -77,7 +77,20 @@ func item(id: String) -> Dictionary:
 
 
 func first_items(chapter_index: int) -> Array:
+	var ch: Dictionary = chapters[chapter_index]
 	var out: Array = []
-	for track in chapters[chapter_index]["tracks"]:
-		out.append({"id": track["items"][0]["id"], "generator": track["generator"], "color": Color(track["color"])})
+	for track in ch["tracks"]:
+		# A track is finished once the board holds as many of its last item as the next recipe needs
+		# (two Nerve Rings for the Worm, two Kittens for the Cat, one Earth for the Pale Blue Dot),
+		# or once that recipe's result exists.
+		var end_id: String = track["items"][-1]["id"]
+		var feeds: Dictionary = ch["final"]
+		if ch.has("extra") and ch["extra"]["recipe"].has(end_id):
+			feeds = ch["extra"]
+		out.append({
+			"id": track["items"][0]["id"], "generator": track["generator"], "color": Color(track["color"]),
+			"end": end_id,
+			"need": maxi(1, feeds["recipe"].count(end_id)),
+			"result": feeds["id"] if feeds["recipe"].has(end_id) else "",
+		})
 	return out

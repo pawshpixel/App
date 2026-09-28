@@ -267,7 +267,26 @@ func _rebuild_generators() -> void:
 		b.add_theme_stylebox_override("pressed", sb)
 		b.add_theme_color_override("font_color", Color("e8e4f0"))
 		b.pressed.connect(_on_generator.bind(f["id"], b))
+		b.set_meta("rule", f)
 		generator_bar.add_child(b)
+	_refresh_generators()
+
+
+## Switches a generator off while its track is finished (its last item is on the board),
+## once the tutorial limit is reached, or once the chapter's ★ exists.
+func _refresh_generators() -> void:
+	var limits: Dictionary = chapter["special"].get("generator_limit", {})
+	var limit: int = limits.get(str(mini(LoopState.loop, 2)), -1)
+	var final_made := _made.has(chapter["final"]["id"])
+	for b in generator_bar.get_children():
+		if not b is Button or b.is_queued_for_deletion():
+			continue
+		var rule: Dictionary = b.get_meta("rule")
+		var track_done: bool = board.count_of(rule["end"]) >= rule["need"] \
+				or (rule["result"] != "" and board.find_cell(rule["result"]) != -1) \
+				or (rule["result"] == "" and _made.has(rule["end"]))
+		var at_limit := limit != -1 and _spawned_first >= limit
+		b.disabled = final_made or track_done or at_limit
 
 
 func _on_generator(first_id: String, button: Button) -> void:
@@ -283,8 +302,7 @@ func _on_generator(first_id: String, button: Button) -> void:
 	LoopState.discover(first_id)
 	_spawned_first += 1
 	_taps += 1
-	if limit != -1 and _spawned_first >= limit:
-		button.disabled = true
+	_refresh_generators()
 	var cs: Dictionary = chapter["special"].get("companion_spawn", {})
 	if cs.has("after_taps") and not _companion_spawned and _taps >= cs["after_taps"]:
 		_companion_places(cs["item"])
@@ -336,6 +354,7 @@ func _on_merged(result: String, _cell: int) -> void:
 		"memorial":
 			companion.covered = false
 
+	_refresh_generators()
 	var final_id: String = chapter["final"]["id"]
 	if _made.has(final_id) and _requirements_met():
 		_complete_chapter()
