@@ -33,11 +33,6 @@
        "id": "nerve_ring",
        "name": "Nerve Ring",
        "desc": "the worm's brain is a ring wrapped around its throat. everything it knows passes through here."
-      },
-      {
-       "id": "nerve_cord",
-       "name": "Nerve Cord",
-       "desc": "the worm's main wire runs along its belly, from head to tail. signals travel both ways."
       }
      ]
     }
@@ -45,17 +40,18 @@
    "final": {
     "id": "the_worm",
     "name": "The Worm ★",
-    "desc": "c. elegans. one millimeter long. 302 neurons, every one mapped. you connected all of them. in 2014 its wiring was loaded into a lego robot, and the robot moved like a worm.",
-    "recipe": []
+    "desc": "c. elegans. one millimeter long. 302 neurons, every one mapped. in 2014 its wiring was loaded into a lego robot, and the robot moved like a worm.",
+    "recipe": [
+     "nerve_ring",
+     "nerve_ring"
+    ]
    },
    "special": {
     "generator_limit": {
-     "1": 302,
-     "2": 303
+     "1": 16,
+     "2": 17
     },
-    "counter": true,
-    "prefill": 28,
-    "collapse_final": true
+    "counter": true
    }
   },
   {

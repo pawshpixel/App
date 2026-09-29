@@ -60,8 +60,7 @@ func _index_chapter(ci: int, ch: Dictionary) -> void:
 			"color": Color(ch["star_color"]), "star": key == "final", "next": "",
 			"path": extra_path if key == "extra" and not extra_path.is_empty() else [f["id"]],
 		}
-		if f["recipe"].size() == 2:
-			recipes[_pair(f["recipe"][0], f["recipe"][1])] = f["id"]
+		recipes[_pair(f["recipe"][0], f["recipe"][1])] = f["id"]
 
 
 func _pair(a: String, b: String) -> String:

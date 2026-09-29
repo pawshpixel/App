@@ -36,7 +36,6 @@ var _companion_spawned := false
 var _unlocked_tracks := {}
 var _busy := false
 var _chapter_done := false
-var _connected := 0
 var pacing: Dictionary = {}
 var pacing_mode := "mystery"
 
@@ -251,7 +250,6 @@ func start_chapter(index: int) -> void:
 	_taps = 0
 	_spawned_first = 0
 	_merges = 0
-	_connected = 0
 	_companion_spawned = false
 	_unlocked_tracks = {}
 	_chapter_done = false
@@ -260,19 +258,19 @@ func start_chapter(index: int) -> void:
 	board.clear_board()
 	board.set_open_count(int(_pace("start_cells")))
 	info.clear_panel()
+	# No chapter screens: the world just shifts. The background drifts to the new color
+	# while the board and the title fade back in.
 	var bg := Color(chapter["board_color"])
-	background.color = bg
 	board.set_grid_color(Color("c4bedd") if bg.get_luminance() > 0.5 else Color("2a2440"))
-	chapter_label.text = "%s — %s" % [chapter["num"], chapter["title"]]
-	var first_id: String = chapter["tracks"][0]["items"][0]["id"]
-	for i in int(chapter["special"].get("prefill", 0)):
-		if board.spawn(first_id) != -1:
-			_spawned_first += 1
-	if _spawned_first > 0:
-		LoopState.discover(first_id)
+	chapter_label.text = chapter["title"]
+	board.modulate.a = 0.0
+	chapter_label.modulate.a = 0.0
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(background, "color", bg, 1.8)
+	tw.tween_property(board, "modulate:a", 1.0, 0.9)
+	tw.tween_property(chapter_label, "modulate:a", 1.0, 1.4)
 	_update_counter()
 	_rebuild_generators()
-	await _title_card("%s\n%s" % [chapter["num"], chapter["title"]])
 
 
 func _limit() -> int:
@@ -284,7 +282,7 @@ func _update_counter() -> void:
 	if not chapter["special"].has("counter"):
 		counter_label.text = ""
 		return
-	counter_label.text = "connected: %d / %d" % [_connected, LoopState.neuron_count()]
+	counter_label.text = str(roundi(LoopState.neuron_count() * _merges / 15.0))
 
 
 ## Tracks the generator can still give items for (not finished, not hidden until the companion acts).
@@ -295,7 +293,7 @@ func _available_tracks() -> Array:
 		var f: Dictionary = firsts[i]
 		if f["generator"] == "never" or (f["generator"] == "after_companion" and not _unlocked_tracks.has(i)):
 			continue
-		if not chapter["special"].get("collapse_final", false) and _track_done(f):
+		if _track_done(f):
 			continue
 		f["index"] = i
 		out.append(f)
@@ -363,7 +361,7 @@ func _refresh_generators() -> void:
 		var rule: Dictionary = b.get_meta("rule")
 		var name_text: String = ItemDB.item(rule["id"])["name"]
 		b.text = "+ %s" % name_text if limit == -1 else "+ %s   ·   %d left" % [name_text, maxi(0, remaining)]
-		var done: bool = _track_done(rule) and not chapter["special"].get("collapse_final", false)
+		var done: bool = _track_done(rule)
 		b.disabled = final_made or done or (limit != -1 and remaining <= 0)
 	for b in generator_bar.get_children():
 		if b is Button:
@@ -414,7 +412,6 @@ func _after_generator_tap() -> void:
 	var cs: Dictionary = chapter["special"].get("companion_spawn", {})
 	if cs.has("after_taps") and not _companion_spawned and _taps >= cs["after_taps"]:
 		_companion_places(cs["item"])
-	_check_collapse()
 
 
 func _on_static_cleared(_cell: int) -> void:
@@ -462,8 +459,7 @@ func _on_merged(result: String, _cell: int) -> void:
 	info.show_item(result)
 	var sp: Dictionary = chapter["special"]
 
-	if sp.has("counter") and result == "neuron_pair":
-		_connected += 2
+	if sp.has("counter"):
 		_update_counter()
 	if sp.get("eye_trigger", "") == result:
 		if LoopState.loop == 1 and not LoopState.eye_opened:
@@ -484,46 +480,9 @@ func _on_merged(result: String, _cell: int) -> void:
 			companion.covered = false
 
 	_refresh_generators()
-	_check_collapse()
 	var final_id: String = chapter["final"]["id"]
 	if _made.has(final_id) and _requirements_met():
 		_complete_chapter()
-
-
-## Tutorial: once every neuron is out and every one that can pair has paired
-## (all 302 in Loop 1; all but one in Loop 2), the whole board flows together into the worm.
-func _check_collapse() -> void:
-	if not chapter["special"].get("collapse_final", false) or _chapter_done or _made.has(chapter["final"]["id"]):
-		return
-	var leftover := 1 if LoopState.loop >= 2 else 0
-	if _spawned_first < _limit() or board.count_of("neuron") > leftover:
-		return
-	_collapse_to_final()
-
-
-func _collapse_to_final() -> void:
-	_busy = true
-	board.locked = true
-	var center_cell := (Board.ROWS / 2) * Board.COLS + Board.COLS / 2
-	var target := board.cell_origin(center_cell)
-	var tw := create_tween().set_parallel(true)
-	for i in board.cells.size():
-		var t: Tile = board.cells[i]
-		if t == null or t.id == "neuron":
-			continue
-		tw.tween_property(t, "position", target, 0.9).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-		tw.tween_property(t, "modulate:a", 0.0, 0.9)
-	await tw.finished
-	for i in board.cells.size():
-		if board.cells[i] != null and board.cells[i].id != "neuron":
-			board.remove_at(i)
-	var final_id: String = chapter["final"]["id"]
-	if board.cells[center_cell] != null:
-		center_cell = board.empty_cells()[0]
-	board.spawn(final_id, center_cell)
-	_busy = false
-	board.locked = false
-	_on_merged(final_id, center_cell)
 
 
 func _requirements_met() -> bool:
@@ -555,27 +514,6 @@ func _complete_chapter() -> void:
 	await get_tree().create_timer(1.6).timeout
 	board.locked = false
 	start_chapter(LoopState.chapter_index + 1)
-
-
-func _title_card(text: String) -> void:
-	_busy = true
-	board.locked = true
-	overlay.visible = true
-	choice_box.visible = false
-	overlay_text.add_theme_font_override("font", FONT_BOLD)
-	overlay_text.add_theme_color_override("font_color", Color("e8e4f0"))
-	overlay_text.text = text
-	overlay.modulate.a = 0.0
-	var tw := create_tween()
-	tw.tween_property(overlay, "modulate:a", 1.0, 0.4)
-	tw.tween_interval(1.2)
-	tw.tween_property(overlay, "modulate:a", 0.0, 0.5)
-	await tw.finished
-	overlay.visible = false
-	overlay.modulate.a = 1.0
-	_reset_overlay_style()
-	board.locked = false
-	_busy = false
 
 
 func _say(text: String, seconds: float) -> void:

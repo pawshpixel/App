@@ -45,7 +45,7 @@ SOURCES = {
     "c10": "Border", "c11": "Waiting Room", "c12": "Nightstand", "archive": "Filing Cabinet", "c13": "Terminal",
 }
 SPECIAL = {
-    "tut": {"generator_limit": {"1": 302, "2": 303}, "counter": True, "prefill": 28, "collapse_final": True},
+    "tut": {"generator_limit": {"1": 16, "2": 17}, "counter": True},
     "c7": {"companion_spawn": {"item": "paw_print", "after_taps": 6}, "requires": ["cat"], "eye_trigger": "cat"},
     "c12": {"companion_spawn": {"item": "brain", "when_made": "mushrooms"}},
 }
@@ -57,8 +57,6 @@ def slug(name: str) -> str:
 
 
 def recipe(text: str) -> list:
-    if "+" not in text:
-        return []  # formed by a special rule (the tutorial's worm), not a two-item merge
     a, b = [p.strip() for p in text.split("+")]
     return [slug(a), slug(b)]
 

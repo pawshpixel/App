@@ -41,7 +41,9 @@ All the numbers live in `data/pacing.json`. Change one, save, press F5.
 
 Put any of these under `"chapters"` → `"c10"` (for example) to change just one chapter.
 
-**The tutorial** works differently on purpose: the board starts half full, the generator holds exactly 302 Neurons (303 in Loop 2), and when every one that can pair has paired, the board flows together into The Worm ★.
+**The tutorial** stays short on purpose: one Neuron button that gives exactly 16 (17 in Loop 2, leaving one unpaired), and a counter that climbs to 302 as they merge into The Worm ★.
+
+There are no chapter screens. The title at the top of the panel changes and the board drifts into the next world's colors, so the whole game plays as one continuous stream.
 
 ## Where things live
 
