@@ -13,6 +13,7 @@
      "title": "The Worm",
      "color": "#e87b9b",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "neuron",
@@ -67,6 +68,7 @@
      "title": "Stars",
      "color": "#ffe9c4",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "spark",
@@ -99,6 +101,7 @@
      "title": "The Planet",
      "color": "#2f7fd0",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "dust",
@@ -147,6 +150,7 @@
      "title": "Life",
      "color": "#4fb8e0",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "cell",
@@ -184,6 +188,7 @@
      "title": "Sight",
      "color": "#d4a03a",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "eye_spot",
@@ -227,6 +232,7 @@
      "title": "The End",
      "color": "#ff9c3a",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "asteroid",
@@ -254,6 +260,7 @@
      "title": "The Survivors",
      "color": "#c8e8ff",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "mouse",
@@ -302,6 +309,7 @@
      "title": "A Life",
      "color": "#f5a05a",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "baby",
@@ -334,6 +342,7 @@
      "title": "Discovery",
      "color": "#c8a45a",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "stone_tool",
@@ -392,6 +401,7 @@
      "title": "Power",
      "color": "#f5a05a",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "wheel",
@@ -424,6 +434,7 @@
      "title": "Words",
      "color": "#e8e4f0",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "clay_tablet",
@@ -477,6 +488,7 @@
      "title": "The City",
      "color": "#6080b0",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "hut",
@@ -519,6 +531,7 @@
      "title": "Motion",
      "color": "#c8d8f0",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "horse_buggy",
@@ -577,6 +590,7 @@
      "title": "Growing Up",
      "color": "#f0c060",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "baby_bottle",
@@ -619,6 +633,7 @@
      "title": "The Toy Box",
      "color": "#ff7ad9",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "trolls_doll",
@@ -661,6 +676,7 @@
      "title": "The Kitten",
      "color": "#e07830",
      "generator": "after_companion",
+     "hope": false,
      "items": [
       {
        "id": "paw_print",
@@ -717,6 +733,7 @@
      "title": "The Screen",
      "color": "#7ab4f5",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "old_mac",
@@ -764,6 +781,7 @@
      "title": "The Weight",
      "color": "#ff6b6b",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "missed_call_mom",
@@ -801,6 +819,34 @@
        "desc": "kept in the car. for the parking lot, before you go inside."
       }
      ]
+    },
+    {
+     "title": "The Group Chat",
+     "color": "#ffd98a",
+     "generator": "always",
+     "hope": true,
+     "items": [
+      {
+       "id": "group_chat",
+       "name": "Group Chat",
+       "desc": "forty people who used to be strangers, all typing at once."
+      },
+      {
+       "id": "union_card",
+       "name": "Union Card",
+       "desc": "a signature. the first one is the hardest. the second one is easier."
+      },
+      {
+       "id": "picket_sign",
+       "name": "Picket Sign",
+       "desc": "the work stops. for once, someone has to listen."
+      },
+      {
+       "id": "town_hall_chair",
+       "name": "Town Hall Chair",
+       "desc": "a folding chair in a fire hall. it's how a town says no."
+      }
+     ]
     }
    ],
    "final": {
@@ -827,6 +873,7 @@
      "title": "The Virus",
      "color": "#8aa89a",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "virus_particle",
@@ -854,6 +901,7 @@
      "title": "The Lockdown",
      "color": "#ddeedd",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "face_mask",
@@ -912,6 +960,7 @@
      "title": "War",
      "color": "#d42020",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "soldier",
@@ -974,6 +1023,7 @@
      "title": "Freedom",
      "color": "#f0f0f0",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "constitution",
@@ -1030,8 +1080,119 @@
    "special": {}
   },
   {
-   "key": "c11",
+   "key": "race",
    "num": "Ch11",
+   "title": "The Race",
+   "hidden": false,
+   "board_color": "#100e06",
+   "star_color": "#ffd24a",
+   "source": "Boardroom",
+   "tracks": [
+    {
+     "title": "The Accord",
+     "color": "#e8c060",
+     "generator": "always",
+     "hope": false,
+     "items": [
+      {
+       "id": "handshake",
+       "name": "Handshake",
+       "desc": "two men agree on something in a room you'll never see the inside of."
+      },
+      {
+       "id": "pen",
+       "name": "Pen",
+       "desc": "gold. used once. given away as a souvenir."
+      },
+      {
+       "id": "signed_pledge",
+       "name": "Signed Pledge",
+       "desc": "a promise to police themselves. nobody can make them keep it."
+      },
+      {
+       "id": "voluntary_stamp",
+       "name": "Voluntary Stamp",
+       "desc": "one word that means no law, no penalty. trust us."
+      }
+     ]
+    },
+    {
+     "title": "The Land",
+     "color": "#6a9a5a",
+     "generator": "always",
+     "hope": false,
+     "items": [
+      {
+       "id": "forest",
+       "name": "Forest",
+       "desc": "old trees, and a hunting lease a family held for generations."
+      },
+      {
+       "id": "fence",
+       "name": "Fence",
+       "desc": "it went up quietly. the neighbors found out when their leases ended."
+      },
+      {
+       "id": "no_hunting_sign",
+       "name": "No Hunting Sign",
+       "desc": "the land is protected now. from you."
+      },
+      {
+       "id": "bunker",
+       "name": "Bunker",
+       "desc": "air filters, a year of food, and a door that only opens from the inside."
+      }
+     ]
+    },
+    {
+     "title": "The Bill",
+     "color": "#4fb8e0",
+     "generator": "always",
+     "hope": false,
+     "items": [
+      {
+       "id": "tax_break",
+       "name": "Tax Break",
+       "desc": "a billion dollars the county will never collect, so the machine will come here."
+      },
+      {
+       "id": "bonus_check",
+       "name": "Bonus Check",
+       "desc": "fifty thousand dollars. more than a year's pay. it's hard to argue with."
+      },
+      {
+       "id": "water_meter",
+       "name": "Water Meter",
+       "desc": "it spins all night. the aquifer under the farms is feeding it."
+      },
+      {
+       "id": "dry_well",
+       "name": "Dry Well",
+       "desc": "the pump hums and nothing comes up."
+      }
+     ]
+    }
+   ],
+   "final": {
+    "id": "gold_trophy",
+    "name": "Gold Trophy ★",
+    "desc": "first place, in a race to build something smarter than everyone. there was never going to be a second place.",
+    "recipe": [
+     "voluntary_stamp",
+     "bunker"
+    ]
+   },
+   "special": {
+    "requires": [
+     "dry_well"
+    ],
+    "rival": true,
+    "companion_watches": "data_center"
+   }
+  },
+  {
+   "key": "c11",
+   "num": "Ch12",
    "title": "Death",
    "hidden": false,
    "board_color": "#f4f2f8",
@@ -1042,6 +1203,7 @@
      "title": "The Room",
      "color": "#c4bedd",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "get_well_card",
@@ -1079,6 +1241,7 @@
      "title": "What's Left",
      "color": "#7a7098",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "photograph",
@@ -1111,7 +1274,7 @@
   },
   {
    "key": "c12",
-   "num": "Ch12",
+   "num": "Ch13",
    "title": "The Unraveling",
    "hidden": false,
    "board_color": "#0c0a14",
@@ -1122,6 +1285,7 @@
      "title": "The Escape",
      "color": "#f5a05a",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "tea",
@@ -1164,6 +1328,7 @@
      "title": "The Machine",
      "color": "#9b6dff",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "wire",
@@ -1201,6 +1366,7 @@
      "title": "The Upload",
      "color": "#e87b9b",
      "generator": "never",
+     "hope": false,
      "items": [
       {
        "id": "brain",
@@ -1239,6 +1405,7 @@
      "title": "The Lab",
      "color": "#d9c28a",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "lab_coat",
@@ -1271,6 +1438,7 @@
      "title": "The Records",
      "color": "#dfe8e6",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "consent_form",
@@ -1313,7 +1481,7 @@
   },
   {
    "key": "c13",
-   "num": "Ch13",
+   "num": "Ch14",
    "title": "The String",
    "hidden": false,
    "board_color": "#07090f",
@@ -1324,6 +1492,7 @@
      "title": "Reboot",
      "color": "#5de8c1",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "bit",
@@ -1361,6 +1530,7 @@
      "title": "Memory",
      "color": "#5de8c1",
      "generator": "always",
+     "hope": false,
      "items": [
       {
        "id": "torn_photo",
@@ -1401,5 +1571,37 @@
    },
    "special": {}
   }
- ]
+ ],
+ "redacted": [
+  "data_center",
+  "layoff_email",
+  "eviction_notice",
+  "union_card",
+  "newspaper",
+  "protest_sign",
+  "bombed_hospital",
+  "body",
+  "ballot_box",
+  "signed_pledge",
+  "voluntary_stamp",
+  "bunker",
+  "tax_break",
+  "water_meter",
+  "dry_well",
+  "gold_trophy",
+  "consent_form",
+  "the_implant"
+ ],
+ "voices": {
+  "ai_chatbot": {
+   "until": "breaking_news",
+   "open": [
+    "who won in 2020? biden won.",
+    "yes. he was convicted. 34 counts.",
+    "yes. his name is in the epstein files.",
+    "yes. it's mostly us. greenhouse gases."
+   ],
+   "closed": "i can't answer political questions."
+  }
+ }
 }

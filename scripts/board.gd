@@ -153,6 +153,28 @@ func spawn(id: String, cell := -1) -> int:
 	return cell
 
 
+## Places an item that can't be moved, forcing its cell open.
+func place_fixed(id: String, cell: int) -> void:
+	remove_at(cell)
+	open[cell] = true
+	spawn(id, cell)
+	cells[cell].fixed = true
+	queue_redraw()
+
+
+## The empty open cell closest to `cell`, or -1 if the board is full.
+func nearest_empty(cell: int) -> int:
+	var origin := Vector2(cell % COLS, cell / COLS)
+	var best := -1
+	var best_d := INF
+	for i in empty_cells():
+		var d := Vector2(i % COLS, i / COLS).distance_to(origin)
+		if d < best_d:
+			best_d = d
+			best = i
+	return best
+
+
 func remove_at(cell: int) -> void:
 	if cell >= 0 and cells[cell] != null:
 		cells[cell].queue_free()
@@ -178,6 +200,8 @@ func _gui_input(event: InputEvent) -> void:
 			_dragging = false
 	elif event is InputEventMouseMotion and _press_cell != -1:
 		var t: Tile = cells[_press_cell]
+		if t.fixed:
+			return
 		if not _dragging and event.position.distance_to(_press_pos) > DRAG_THRESHOLD:
 			_dragging = true
 			t.z_index = 10
@@ -195,7 +219,7 @@ func _drop(target: int, global_point: Vector2) -> void:
 		t.position = cell_origin(from)
 		dropped_outside.emit(from, global_point)
 		return
-	if target == from or not open[target]:
+	if target == from or not open[target] or (cells[target] != null and cells[target].fixed):
 		t.position = cell_origin(from)
 		return
 	if cells[target] == null:

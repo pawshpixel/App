@@ -1,0 +1,13 @@
+{
+	"_help": "The quiet screen after TERMINATE. Edit the lines and links freely; each link becomes a button that opens in the browser.",
+	"title": "this part is real.",
+	"lines": [
+		"the machine in this game is being built right now.",
+		"it runs on water, on power, and on people not paying attention."
+	],
+	"links": [
+		{ "label": "check that you're registered to vote", "url": "https://vote.org" },
+		{ "label": "find the people already organizing", "url": "https://techworkerscoalition.org" },
+		{ "label": "find the data centers near you", "url": "https://www.datacentermap.com" }
+	]
+}

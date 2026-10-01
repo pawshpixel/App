@@ -176,6 +176,8 @@ dict(
   final=("Data Center ★", "Metropolis + Satellite",
          "rooms full of machines holding everything we've written, posted and searched. they never sleep. some use as much electricity as a small city."),
   companion="Eye closed. When Data Center ★ is made, the traces on the board and the traces on the companion pulse together, once.",
+  facts=[("red", "The machine keeps taking",
+    "The Data Center ★ doesn't leave. From the next chapter to the end of the loop it sits in the bottom-right corner of every board. It can't be moved, merged or thrown away. Every few taps it <strong>takes something</strong>: a cell next to it fills with Static. The top panel shows the water it has used this loop, and by the end of Loop 1 it lands near <strong>8.4 billion gallons</strong>, the yearly amount Meta's Louisiana data center is registered to draw. Building the Town Hall Chair in The Feed slows it down by half.")],
 ),
 dict(
   key="c7", num="Ch7", title="Millennial Childhood", time=55, stage="Stage 4", color="amber",
@@ -241,10 +243,22 @@ dict(
       ("Eviction Notice", "taped to the door where the whole hallway can read it."),
       ("Tissue Box", "kept in the car. for the parking lot, before you go inside."),
     ]),
+    dict(code="08c", tag="hope", title="The Group Chat", items=[
+      ("Group Chat", "forty people who used to be strangers, all typing at once."),
+      ("Union Card", "a signature. the first one is the hardest. the second one is easier."),
+      ("Picket Sign", "the work stops. for once, someone has to listen."),
+      ("Town Hall Chair", "a folding chair in a fire hall. it's how a town says no."),
+    ]),
   ],
   final=("Cracked Screen ★", "Breaking News + Tissue Box",
          "the world and the weight, at the same time. something had to give."),
-  companion="Eye open. It flicks to every new item the instant it lands, a little too fast.",
+  companion="Eye open. It flicks to every new item the instant it lands, a little too fast. When <strong>Breaking News</strong> is made, one cable twitches, and the AI Chatbot stops answering.",
+  facts=[
+    ("violet", "The chatbot that stops answering",
+     "Tap the <strong>AI Chatbot</strong> and it answers a real question honestly: <span class='mono'>\"yes. he was convicted. 34 counts.\"</span> The moment <strong>Breaking News</strong> is made, it changes. Tap it again and it says <span class='mono'>\"i can't answer political questions.\"</span> In Loop 2 the info panel shows both, the honest answer struck through above the new one. Based on the White House's America.gov chatbot, which was restricted on September 29, 2026 while the president was still on stage."),
+    ("violet", "The Group Chat (the hope track)",
+     "A third track that the Phone drops <strong>much less often</strong> than the other two, and the chapter can end without it. Hope is optional, and harder to build than the machine. If the player makes the <strong>Town Hall Chair</strong>: every piece of Static on the board cancels at once, the companion blinks slowly, and for the rest of the loop the Data Center takes half as often."),
+  ],
 ),
 dict(
   key="c9", num="Ch9", title="Pandemic", time=40, stage="Stage 4→5", color="red",
@@ -316,7 +330,39 @@ dict(
     ],
 ),
 dict(
-  key="c11", num="Ch11", title="Death", time=30, stage="Stage 5–6", color="red",
+  key="race", num="Ch11", title="The Race", time=35, stage="Stage 5", color="red",
+  story=[
+    "A boardroom, a handshake, and a race nobody voted for. One track is a promise written so nobody has to keep it. One is a forest fenced off from the people who lived around it. One is the bill, paid by a town in water. The ★ is a trophy for coming first.",
+    "A <strong>RIVAL</strong> bar in the top panel climbs every time you tap. It never reaches 100%. It doesn't have to. Just being in the race is enough to make you hurry.",
+  ],
+  tracks=[
+    dict(code="R-a", tag="the accord", title="The Accord", items=[
+      ("Handshake", "two men agree on something in a room you'll never see the inside of."),
+      ("Pen", "gold. used once. given away as a souvenir."),
+      ("Signed Pledge", "a promise to police themselves. nobody can make them keep it."),
+      ("Voluntary Stamp", "one word that means no law, no penalty. trust us."),
+    ]),
+    dict(code="R-b", tag="the land", title="The Land", items=[
+      ("Forest", "old trees, and a hunting lease a family held for generations."),
+      ("Fence", "it went up quietly. the neighbors found out when their leases ended."),
+      ("No Hunting Sign", "the land is protected now. from you."),
+      ("Bunker", "air filters, a year of food, and a door that only opens from the inside."),
+    ]),
+    dict(code="R-c", tag="the bill", title="The Bill", items=[
+      ("Tax Break", "a billion dollars the county will never collect, so the machine will come here."),
+      ("Bonus Check", "fifty thousand dollars. more than a year's pay. it's hard to argue with."),
+      ("Water Meter", "it spins all night. the aquifer under the farms is feeding it."),
+      ("Dry Well", "the pump hums and nothing comes up."),
+    ]),
+  ],
+  final=("Gold Trophy ★", "Voluntary Stamp + Bunker",
+         "first place, in a race to build something smarter than everyone. there was never going to be a second place."),
+  companion="Its eye doesn't follow your taps here. It watches the Data Center in the corner. The chapter can't end until the <strong>Dry Well</strong> exists: you can't win this race without someone else paying for it.",
+  facts=[("violet", "Where this comes from",
+    "Every item is from the news in September 2026: AI companies signing a voluntary self-policing accord at the White House while the race against China was named the priority, a tech CEO quietly buying 37,000 acres of forest and ending local hunting leases, a $1.5 billion tax break asked for a data center outside Rochester, and $50,000 teacher bonuses paid from a Meta data center's taxes in Louisiana.")],
+),
+dict(
+  key="c11", num="Ch12", title="Death", time=30, stage="Stage 5–6", color="red",
   story=[
     "The void turns white. The programmer is caring for someone they love, and losing them. The chapter never says who, because the player fills that in. One track is the hospital room. The other is the things they leave behind.",
     "After this, the programmer wants out of the world. Everything that follows is a response to this chapter.",
@@ -341,7 +387,7 @@ dict(
   companion="Present and still. Its eye doesn't blink once for the whole chapter. After Gravestone ★ there are three seconds of silence, then the board fades.",
 ),
 dict(
-  key="c12", num="Ch12", title="The Unraveling", time=45, stage="Stage 6", color="dim",
+  key="c12", num="Ch13", title="The Unraveling", time=45, stage="Stage 6", color="dim",
   story=[
     "A person coming apart on one side of the board, and a machine being built on the other. The programmer is trying to escape the world, and also trying to stay in it forever.",
     "When the escape track bottoms out, a brain appears on the board. Nobody tapped for it. Wiring it up is the upload.",
@@ -401,7 +447,7 @@ dict(
   companion="Silent for the whole chapter. Its eye doesn't follow your taps here. It follows <strong>The Implant</strong>, wherever it is on the board.",
 ),
 dict(
-  key="c13", num="Ch13", title="The String", time=25, stage="Stage 6–7", color="violet",
+  key="c13", num="Ch14", title="The String", time=25, stage="Stage 6–7", color="violet",
   story=[
     "The uploaded mind rebuilds itself from the inside. On one track, a blank computer screen boots back up: bits, code, a blinking cursor, a loading bar. On the other, a memory pieces itself together: a torn photo, a face, a name, a mirror. The player doesn't realize they're putting their own mind back together.",
     "The last item is the smallest thing physics has imagined, a vibrating string. It looks exactly like the <strong>Spark</strong> from Ch1, except one pixel is wrong.",
@@ -442,4 +488,27 @@ MUTATION_LOGS = [
   "DAY 62 — searched the grounds. nothing. do not report.",
   "DAY 200 — the implant is still transmitting. it's inside a house somewhere. someone is feeding it.",
   "DAY 4,017 — signal stopped. someone should keep the data.",
+]
+
+# Items that talk. "open" lines are shown (one per tap) until the chapter's trigger item is made,
+# then only "closed". Shown in every loop, because it's the item speaking, not a description.
+VOICES = {
+  "ai_chatbot": dict(
+    until="breaking_news",
+    open=[
+      "who won in 2020? biden won.",
+      "yes. he was convicted. 34 counts.",
+      "yes. his name is in the epstein files.",
+      "yes. it's mostly us. greenhouse gases.",
+    ],
+    closed="i can't answer political questions.",
+  ),
+}
+
+# Loop 2+: these descriptions come back blacked out. Tap the companion to restore one.
+REDACTED = [
+  "data_center", "layoff_email", "eviction_notice", "union_card",
+  "newspaper", "protest_sign", "bombed_hospital", "body", "ballot_box",
+  "signed_pledge", "voluntary_stamp", "bunker", "tax_break", "water_meter", "dry_well", "gold_trophy",
+  "consent_form", "the_implant",
 ]

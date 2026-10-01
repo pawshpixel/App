@@ -9,6 +9,8 @@ var id := ""
 var _label: Label
 var _bob_phase := 0.0
 var float_enabled := true
+## Fixed tiles (the Data Center) can be tapped but never dragged, merged, swapped or thrown away.
+var fixed := false
 
 
 func setup(item_id: String, size_px: float, phase: float) -> void:

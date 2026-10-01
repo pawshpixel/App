@@ -7,7 +7,12 @@
 		"upgrade_chance": 0.08,
 		"static_chance": 0.15,
 		"max_chain_depth": 6,
-		"recycle": true
+		"recycle": true,
+		"hope_weight": 0.35,
+		"machine_every": 7,
+		"machine_gallons_per_tap": 13000000,
+		"rival_per_tap": 3.0,
+		"restore_every_merges": 10
 	},
 	"chapters": {
 		"tut": { "start_cells": 56, "static_chance": 0.0, "upgrade_chance": 0.0, "recycle": false }

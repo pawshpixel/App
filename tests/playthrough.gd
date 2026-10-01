@@ -5,6 +5,9 @@ extends Node
 
 var main: Node
 var _gen_turn := 0
+var _saw_chatbot_silenced := false
+var _saw_rival := false
+var _saw_machine_static := false
 
 
 func _ready() -> void:
@@ -18,9 +21,19 @@ func _ready() -> void:
 	var ok := true
 	ok = await _play_loop(1) and ok
 	ok = _check(LoopState.eye_opened, "eye opened during loop 1") and ok
+	ok = _check(LoopState.machine_built, "the data center stayed built") and ok
+	print("  water used in loop 1: ", main.format_gallons(LoopState.gallons))
+	ok = _check(LoopState.gallons > 0.0, "the machine used water") and ok
+	ok = _check(_saw_chatbot_silenced, "the chatbot stopped answering after Breaking News") and ok
+	ok = _check(_saw_rival, "the rival bar climbed in The Race") and ok
+	ok = _check(_saw_machine_static, "the machine filled cells with static") and ok
 	main._on_continue()
+	ok = _check(not LoopState.machine_built and LoopState.gallons == 0.0, "the machine resets with the loop") and ok
 	ok = await _play_loop(2) and ok
 	ok = _check(LoopState.is_discovered("neuron_303"), "neuron 303 appeared in loop 2") and ok
+	ok = _check(LoopState.is_redacted("bunker") or LoopState.restored.has("bunker"), "loop 2 redacts the bunker") and ok
+	LoopState.restore_charges = 1
+	ok = _check(LoopState.restore("bunker") and not LoopState.is_redacted("bunker"), "the companion can restore a redaction") and ok
 	print("RESULT: ", "PASS" if ok else "FAIL")
 	LoopState.reset_all()
 	get_tree().quit(0 if ok else 1)
@@ -36,7 +49,7 @@ func _play_loop(loop_number: int) -> bool:
 		if main.choice_box.visible:
 			print("loop %d ended after chapters: %s" % [loop_number, ", ".join(PackedStringArray(seen))])
 			print("  taps + merges per chapter: ", actions)
-			return _check(seen.size() == 14, "loop %d played 14 chapters" % loop_number)
+			return _check(seen.size() == 15, "loop %d played 15 chapters" % loop_number)
 		if main._busy or main.board.locked or main.chapter.is_empty():
 			continue
 		var key: String = main.chapter["key"]
@@ -47,6 +60,12 @@ func _play_loop(loop_number: int) -> bool:
 			if not main.companion.covered:
 				print("FAIL: companion should cover its eye during the war")
 				return false
+		if key == "c8" and main._made.has("breaking_news") and main._silenced.has("ai_chatbot"):
+			_saw_chatbot_silenced = true
+		if key == "race" and main._rival > 30.0 and main.counter_label.text.begins_with("RIVAL"):
+			_saw_rival = true
+		if main._machine_running() and main._machine_taps >= int(main._pace("machine_every")):
+			_saw_machine_static = true
 		if main.board.auto_merge_step():
 			actions[key] = actions.get(key, 0) + 1
 			continue

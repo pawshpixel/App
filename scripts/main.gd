@@ -8,11 +8,17 @@ const FONT_LIGHT := preload("res://assets/fonts/JetBrainsMono-ExtraLight.ttf")
 const FONT_ITALIC := preload("res://assets/fonts/JetBrainsMono-Italic.ttf")
 const TEAL := Color("5de8c1")
 const VIOLET := Color("9b6dff")
+const WATER := Color("7ab4f5")
+const RIVAL_RED := Color("ff6b6b")
 const PACING_PATH := "res://data/pacing.json"
+const REAL_WORLD_PATH := "res://data/real_world.json"
 const PACING_DEFAULTS := {
 	"start_cells": 9, "unlock_per_new_item": 3, "upgrade_chance": 0.08, "static_chance": 0.15, "recycle": true,
-	"max_chain_depth": 6,
+	"max_chain_depth": 6, "hope_weight": 0.35, "machine_every": 7, "machine_gallons_per_tap": 13000000,
+	"rival_per_tap": 3.0, "restore_every_merges": 10,
 }
+## The Data Center sits in the bottom-right corner once it's built.
+const MACHINE_CELL := Board.COLS * Board.ROWS - 1
 
 var frame: Control
 var background: ColorRect
@@ -38,6 +44,11 @@ var _busy := false
 var _chapter_done := false
 var pacing: Dictionary = {}
 var pacing_mode := "mystery"
+var _silenced := {}      # items whose voice has gone quiet this chapter (the chatbot after Breaking News)
+var _voice_index := {}
+var _last_said := {}
+var _machine_taps := 0
+var _rival := 0.0
 
 
 func _ready() -> void:
@@ -112,6 +123,15 @@ func _build_top_panel() -> void:
 	companion.position = Vector2(920, 275)
 	companion.scale = Vector2(1.15, 1.15)
 	frame.add_child(companion)
+
+	# Tapping the companion asks it to read a redacted description back to you.
+	var eye := Button.new()
+	eye.flat = true
+	eye.focus_mode = Control.FOCUS_NONE
+	eye.position = Vector2(840, 150)
+	eye.size = Vector2(160, 230)
+	eye.pressed.connect(_on_eye_tapped)
+	frame.add_child(eye)
 
 
 func _build_board() -> void:
@@ -253,10 +273,18 @@ func start_chapter(index: int) -> void:
 	_companion_spawned = false
 	_unlocked_tracks = {}
 	_chapter_done = false
+	_silenced = {}
+	_voice_index = {}
+	_last_said = {}
+	_machine_taps = 0
+	_rival = 10.0 + randf() * 8.0   # they started before you
 	companion.covered = false
 
 	board.clear_board()
 	board.set_open_count(int(_pace("start_cells")))
+	if LoopState.machine_built:
+		board.place_fixed("data_center", MACHINE_CELL)
+		_companion_watch_machine()
 	info.clear_panel()
 	# No chapter screens: the world just shifts. The background drifts to the new color
 	# while the board and the title fade back in.
@@ -278,11 +306,32 @@ func _limit() -> int:
 	return limits.get(str(mini(LoopState.loop, 2)), -1)
 
 
+## The number in the top panel: the worm's neurons, the rival's lead, or the water the machine has used.
 func _update_counter() -> void:
-	if not chapter["special"].has("counter"):
+	var sp: Dictionary = chapter["special"]
+	if sp.has("counter"):
+		counter_label.add_theme_color_override("font_color", TEAL)
+		counter_label.text = str(roundi(LoopState.neuron_count() * _merges / 15.0))
+	elif sp.get("rival", false):
+		counter_label.add_theme_color_override("font_color", RIVAL_RED)
+		counter_label.text = "RIVAL  %d%%" % int(_rival)
+	elif _machine_running():
+		counter_label.add_theme_color_override("font_color", WATER)
+		counter_label.text = format_gallons(LoopState.gallons)
+	else:
 		counter_label.text = ""
-		return
-	counter_label.text = str(roundi(LoopState.neuron_count() * _merges / 15.0))
+
+
+static func format_gallons(g: float) -> String:
+	if g >= 1e9:
+		return "%.2fB gal" % (g / 1e9)
+	if g >= 1e6:
+		return "%dM gal" % int(g / 1e6)
+	return "%d gal" % int(g)
+
+
+func _machine_running() -> bool:
+	return LoopState.machine_built and board.find_cell("data_center") == MACHINE_CELL
 
 
 ## Tracks the generator can still give items for (not finished, not hidden until the companion acts).
@@ -350,7 +399,9 @@ func _rebuild_generators() -> void:
 func _refresh_generators() -> void:
 	var limit := _limit()
 	var remaining := limit - _spawned_first
-	var final_made := _made.has(chapter["final"]["id"])
+	# The ★ only switches the generators off once nothing else is required. Otherwise a player who
+	# makes the ★ first (before the Cat, before the Dry Well) would be stuck.
+	var final_made := _made.has(chapter["final"]["id"]) and _requirements_met()
 	for b in generator_bar.get_children():
 		if not b is Button or b.is_queued_for_deletion():
 			continue
@@ -391,7 +442,7 @@ func _on_mystery_generator() -> void:
 		return
 	var id := "static"
 	if randf() >= float(_pace("static_chance")):
-		var track: Dictionary = ItemDB.chapters[LoopState.chapter_index]["tracks"][tracks[randi() % tracks.size()]["index"]]
+		var track: Dictionary = ItemDB.chapters[LoopState.chapter_index]["tracks"][_weighted_pick(tracks)["index"]]
 		# Merging doubles each step, so an 11-item chain would need 1,024 of its first item.
 		# Chains longer than max_chain_depth also drop items partway up, evenly across the bottom tiers.
 		var n: int = track["items"].size()
@@ -406,12 +457,52 @@ func _on_mystery_generator() -> void:
 	_after_generator_tap()
 
 
+## Picks a track at random. Hope tracks come up less often than the rest (pacing knob "hope_weight").
+func _weighted_pick(tracks: Array) -> Dictionary:
+	var total := 0.0
+	for t in tracks:
+		total += float(_pace("hope_weight")) if t["hope"] else 1.0
+	var roll := randf() * total
+	for t in tracks:
+		roll -= float(_pace("hope_weight")) if t["hope"] else 1.0
+		if roll <= 0.0:
+			return t
+	return tracks[-1]
+
+
 func _after_generator_tap() -> void:
 	_taps += 1
 	_refresh_generators()
+	if _machine_running():
+		LoopState.gallons += float(_pace("machine_gallons_per_tap"))
+		_machine_taps += 1
+		var every: int = int(_pace("machine_every")) * (2 if LoopState.hope_built else 1)
+		if _machine_taps % every == 0:
+			_machine_takes()
+		_companion_watch_machine()
+	if chapter["special"].get("rival", false):
+		_rival = minf(99.0, _rival + float(_pace("rival_per_tap")) * randf_range(0.6, 1.4))
+	_update_counter()
 	var cs: Dictionary = chapter["special"].get("companion_spawn", {})
 	if cs.has("after_taps") and not _companion_spawned and _taps >= cs["after_taps"]:
 		_companion_places(cs["item"])
+
+
+## The Data Center takes something: the nearest free cell fills with Static.
+func _machine_takes() -> void:
+	var cell := board.nearest_empty(MACHINE_CELL)
+	if cell == -1:
+		return
+	board.spawn("static", cell)
+	LoopState.discover("static")
+	var machine: Tile = board.cells[MACHINE_CELL]
+	if machine != null:
+		machine.pop()
+
+
+func _companion_watch_machine() -> void:
+	if chapter["special"].get("companion_watches", "") == "data_center" and companion.eye_open:
+		companion.look_toward(board.global_position + board.cell_origin(MACHINE_CELL))
 
 
 func _on_static_cleared(_cell: int) -> void:
@@ -444,10 +535,53 @@ func _companion_places(id: String) -> void:
 
 
 func _on_item_tapped(id: String) -> void:
-	info.show_item(id)
+	_show(id)
+	if chapter["special"].has("companion_watches") and _machine_running():
+		_companion_watch_machine()
+		return
 	var cell: int = board.find_cell(id)
 	if cell != -1 and companion.eye_open:
 		companion.look_toward(board.global_position + board.cell_origin(cell))
+
+
+## Shows an item in the info panel with its voice line, if it has one.
+## `speak` moves a talking item on to its next line.
+func _show(id: String, speak := true) -> void:
+	info.show_item(id, _voice_for(id, speak))
+
+
+func _voice_for(id: String, speak: bool) -> String:
+	if id == "data_center" and LoopState.machine_built:
+		return "water used this loop: %s" % format_gallons(LoopState.gallons).replace(" gal", " gallons")
+	if not ItemDB.voices.has(id):
+		return ""
+	var v: Dictionary = ItemDB.voices[id]
+	if _silenced.has(id):
+		var closed := "“%s”" % v["closed"]
+		if LoopState.loop >= 2 and _last_said.has(id):
+			return "[s][color=#5a6a80]“%s”[/color][/s]\n%s" % [_last_said[id], closed]
+		return closed
+	var lines: Array = v["open"]
+	var i: int = _voice_index.get(id, 0)
+	if speak:
+		_voice_index[id] = i + 1
+	var line: String = lines[i % lines.size()]
+	_last_said[id] = line
+	return "“%s”" % line
+
+
+## Tap the companion while a redacted description is showing and it reads it back to you.
+func _on_eye_tapped() -> void:
+	if not companion.eye_open or companion.covered or _busy:
+		return
+	var id := info.shown_id
+	if id == "" or not LoopState.is_redacted(id):
+		return
+	if LoopState.restore(id):
+		companion.slow_blink()
+		_show(id, false)
+	else:
+		companion.twitch_cable()
 
 
 func _on_merged(result: String, _cell: int) -> void:
@@ -456,7 +590,13 @@ func _on_merged(result: String, _cell: int) -> void:
 		board.unlock(int(_pace("unlock_per_new_item")))
 	_made[result] = true
 	_merges += 1
-	info.show_item(result)
+	if LoopState.loop >= 2:
+		LoopState.count_merge_for_charge(int(_pace("restore_every_merges")))
+	for vid in ItemDB.voices:
+		if ItemDB.voices[vid]["until"] == result and not _silenced.has(vid):
+			_silenced[vid] = true
+			companion.twitch_cable()
+	_show(result)
 	var sp: Dictionary = chapter["special"]
 
 	if sp.has("counter"):
@@ -478,11 +618,24 @@ func _on_merged(result: String, _cell: int) -> void:
 			companion.covered = true
 		"memorial":
 			companion.covered = false
+		"town_hall_chair":
+			_hope_built()
 
 	_refresh_generators()
 	var final_id: String = chapter["final"]["id"]
 	if _made.has(final_id) and _requirements_met():
 		_complete_chapter()
+
+
+## The Town Hall Chair: every Static on the board cancels, and the machine slows down for the rest of the loop.
+func _hope_built() -> void:
+	LoopState.hope_built = true
+	LoopState.restore_charges += 3
+	LoopState.save_progress()
+	for i in board.cells.size():
+		if board.cells[i] != null and board.cells[i].id == "static":
+			board.remove_at(i)
+	companion.slow_blink()
 
 
 func _requirements_met() -> bool:
@@ -497,6 +650,9 @@ func _complete_chapter() -> void:
 		return
 	_chapter_done = true
 	board.locked = true
+	if chapter["final"]["id"] == "data_center":
+		LoopState.machine_built = true
+		LoopState.save_progress()
 	if chapter["key"] == "tut" and LoopState.loop >= 2:
 		# The unpaired neuron. If the player never tapped for it, it arrives on its own.
 		var cell: int = board.find_cell("neuron")
@@ -505,7 +661,7 @@ func _complete_chapter() -> void:
 		await get_tree().create_timer(0.8).timeout
 		cell = board.spawn("neuron_303", cell)
 		LoopState.discover("neuron_303")
-		info.show_item("neuron_303")
+		_show("neuron_303")
 		await get_tree().create_timer(1.6).timeout
 		if cell != -1:
 			board.remove_at(cell)
@@ -562,6 +718,32 @@ func _on_terminate() -> void:
 	overlay_text.add_theme_font_override("font", FONT_LIGHT)
 	overlay_text.add_theme_color_override("font_color", Color("8a86a8"))
 	overlay_text.text = "the simulation has ended.\n\n(the animated ending and\n\"i'm closing my eyes\" play here)"
+	await get_tree().create_timer(5.0).timeout
+	_show_real_world()
+
+
+## The last screen: the game steps out of the way and points at the real thing (data/real_world.json).
+func _show_real_world() -> void:
+	var data = JSON.parse_string(FileAccess.get_file_as_string(REAL_WORLD_PATH))
+	if typeof(data) != TYPE_DICTIONARY:
+		return
+	overlay.color = Color("07090f")
+	overlay_text.add_theme_font_override("font", FONT_LIGHT)
+	overlay_text.add_theme_font_size_override("font_size", 30)
+	overlay_text.add_theme_color_override("font_color", Color("8a86a8"))
+	overlay_text.size = Vector2(W - 160, 900)
+	overlay_text.text = "%s\n\n%s" % [data.get("title", ""), "\n".join(PackedStringArray(data.get("lines", [])))]
+	var links := VBoxContainer.new()
+	links.name = "RealWorld"
+	links.position = Vector2(120, 980)
+	links.size = Vector2(W - 240, 500)
+	links.add_theme_constant_override("separation", 28)
+	overlay.add_child(links)
+	for link in data.get("links", []):
+		var b := _choice_button("→  " + link["label"], Color("e8e4f0"), OS.shell_open.bind(link["url"]))
+		b.add_theme_font_size_override("font_size", 30)
+		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		links.add_child(b)
 
 
 # ─── dev tools ─────────────────────────────────────────────────────

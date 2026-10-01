@@ -6,7 +6,7 @@ import json
 import re
 from pathlib import Path
 
-from chapters import CHAPTERS
+from chapters import CHAPTERS, REDACTED, VOICES
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -20,9 +20,10 @@ TRACK_COLORS = {
     "c5": ["#f5a05a", "#e8e4f0"],
     "c6": ["#6080b0", "#c8d8f0"],
     "c7": ["#f0c060", "#ff7ad9", "#e07830"],
-    "c8": ["#7ab4f5", "#ff6b6b"],
+    "c8": ["#7ab4f5", "#ff6b6b", "#ffd98a"],
     "c9": ["#8aa89a", "#ddeedd"],
     "c10": ["#d42020", "#f0f0f0"],
+    "race": ["#e8c060", "#6a9a5a", "#4fb8e0"],
     "c11": ["#c4bedd", "#7a7098"],
     "c12": ["#f5a05a", "#9b6dff", "#e87b9b"],
     "archive": ["#d9c28a", "#dfe8e6"],
@@ -31,24 +32,27 @@ TRACK_COLORS = {
 STAR_COLORS = {
     "tut": "#e87b9b", "c1": "#ffd98a", "c2": "#d4a03a", "c3": "#c8e8ff", "c4": "#f5a05a",
     "c5": "#c8a45a", "c6": "#c8d8f0", "c7": "#f0c060", "c8": "#ff6b6b", "c9": "#ddeedd",
-    "c10": "#f0f0f0", "c11": "#7a7098", "c12": "#9b6dff", "archive": "#d9c28a", "c13": "#5de8c1",
+    "c10": "#f0f0f0", "race": "#ffd24a", "c11": "#7a7098", "c12": "#9b6dff", "archive": "#d9c28a", "c13": "#5de8c1",
 }
 BOARD_COLORS = {
     "tut": "#07090f", "c1": "#0b0a1c", "c2": "#07141a", "c3": "#140c0a", "c4": "#140e08",
     "c5": "#12100a", "c6": "#0a0e16", "c7": "#16110a", "c8": "#0e0c16", "c9": "#0e1210",
-    "c10": "#120808", "c11": "#f4f2f8", "c12": "#0c0a14", "archive": "#12110c", "c13": "#07090f",
+    "c10": "#120808", "race": "#100e06", "c11": "#f4f2f8", "c12": "#0c0a14", "archive": "#12110c", "c13": "#07090f",
 }
 # The one mystery generator each chapter uses when pacing mode is "mystery".
 SOURCES = {
     "tut": "Neuron", "c1": "The Void", "c2": "Tide Pool", "c3": "The Sky", "c4": "Campfire",
     "c5": "Workshop", "c6": "Crossroads", "c7": "Toy Chest", "c8": "Phone", "c9": "Front Door",
-    "c10": "Border", "c11": "Waiting Room", "c12": "Nightstand", "archive": "Filing Cabinet", "c13": "Terminal",
+    "c10": "Border", "race": "Boardroom", "c11": "Waiting Room", "c12": "Nightstand", "archive": "Filing Cabinet", "c13": "Terminal",
 }
 SPECIAL = {
     "tut": {"generator_limit": {"1": 16, "2": 17}, "counter": True},
     "c7": {"companion_spawn": {"item": "paw_print", "after_taps": 6}, "requires": ["cat"], "eye_trigger": "cat"},
     "c12": {"companion_spawn": {"item": "brain", "when_made": "mushrooms"}},
+    "race": {"requires": ["dry_well"], "rival": True, "companion_watches": "data_center"},
 }
+# Tracks the generator drops less often (pacing knob "hope_weight").
+HOPE_TRACKS = {("c8", 2)}
 NO_GENERATOR = {("c7", 2): "after_companion", ("c12", 2): "never"}
 
 
@@ -69,6 +73,7 @@ for c in CHAPTERS:
             "title": t["title"],
             "color": TRACK_COLORS[c["key"]][i],
             "generator": NO_GENERATOR.get((c["key"], i), "always"),
+            "hope": (c["key"], i) in HOPE_TRACKS,
             "items": [{"id": slug(n), "name": n, "desc": d} for n, d in t["items"]],
         })
     fn, fr, fd = c["final"]
@@ -87,6 +92,9 @@ for c in CHAPTERS:
 
 ids = [i["id"] for ch in out for t in ch["tracks"] for i in t["items"]] + [ch["final"]["id"] for ch in out]
 assert len(ids) == len(set(ids)), "duplicate item ids"
+missing = [i for i in list(REDACTED) + list(VOICES) if i not in ids]
+assert not missing, f"unknown ids in REDACTED/VOICES: {missing}"
 
-(ROOT / "data" / "chapters.json").write_text(json.dumps({"chapters": out}, indent=1, ensure_ascii=False))
+data = {"chapters": out, "redacted": REDACTED, "voices": VOICES}
+(ROOT / "data" / "chapters.json").write_text(json.dumps(data, indent=1, ensure_ascii=False))
 print(f"wrote {len(out)} chapters, {len(ids)} items")

@@ -7,6 +7,7 @@ const DATA_PATH := "res://data/chapters.json"
 var chapters: Array = []
 var items := {}     # id -> {id, name, desc, chapter, color, star, next, path}
 var recipes := {}   # "a|b" (sorted) -> result id
+var voices := {}    # id -> {until, open: [lines], closed}
 
 
 func _ready() -> void:
@@ -18,6 +19,10 @@ func _ready() -> void:
 	chapters = parsed["chapters"]
 	for ci in chapters.size():
 		_index_chapter(ci, chapters[ci])
+	voices = parsed.get("voices", {})
+	for id in parsed.get("redacted", []):
+		if items.has(id):
+			items[id]["redact"] = true
 	items["static"] = {
 		"id": "static", "name": "Static", "chapter": 0, "color": Color("5a5560"), "star": false,
 		"desc": "noise. the simulation hasn't decided what this is yet. two of them cancel out.",
@@ -94,7 +99,7 @@ func first_items(chapter_index: int) -> Array:
 			feeds = ch["extra"]
 		out.append({
 			"id": track["items"][0]["id"], "generator": track["generator"], "color": Color(track["color"]),
-			"end": end_id,
+			"end": end_id, "hope": track.get("hope", false),
 			"need": maxi(1, feeds["recipe"].count(end_id)),
 			"result": feeds["id"] if feeds["recipe"].has(end_id) else "",
 		})
