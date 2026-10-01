@@ -29,7 +29,7 @@ Everything plays with placeholder squares, so you can draw into a game that alre
 - **The Group Chat** (The Feed): a hope track that drops much less often and is optional. Making the Town Hall Chair cancels every Static on the board and slows the machine by half for the rest of the loop.
 - **The Race** (new chapter, after War + Freedom): the Accord, the Land and the Bill. A RIVAL bar climbs with every tap and never reaches 100%. The chapter can't end until the Dry Well exists.
 - **Redactions** (Loop 2+): the items in `REDACTED` (`tools/chapters.py`) come back blacked out. Tap the companion to restore one. You earn a restore every few merges, and three more for building the Town Hall Chair.
-- **This part is real**: after TERMINATE, a quiet last screen with real links. Edit them in `data/real_world.json`.
+- **This part is real** (off): an optional last screen after TERMINATE with real-world links. It's switched off, so the endings are unchanged. Set `"enabled": true` in `data/real_world.json` to try it.
 
 **DEV buttons** (bottom of the screen): `skip ▶` finishes the chapter, `auto-merge` does one merge for you,
 `loop +1` jumps to the next loop, `reset` wipes progress. Turn them off with `DEV_MODE` in `scripts/loop_state.gd`.

@@ -718,8 +718,14 @@ func _on_terminate() -> void:
 	overlay_text.add_theme_font_override("font", FONT_LIGHT)
 	overlay_text.add_theme_color_override("font_color", Color("8a86a8"))
 	overlay_text.text = "the simulation has ended.\n\n(the animated ending and\n\"i'm closing my eyes\" play here)"
-	await get_tree().create_timer(5.0).timeout
-	_show_real_world()
+	if _real_world_enabled():
+		await get_tree().create_timer(5.0).timeout
+		_show_real_world()
+
+
+func _real_world_enabled() -> bool:
+	var data = JSON.parse_string(FileAccess.get_file_as_string(REAL_WORLD_PATH))
+	return typeof(data) == TYPE_DICTIONARY and data.get("enabled", false)
 
 
 ## The last screen: the game steps out of the way and points at the real thing (data/real_world.json).

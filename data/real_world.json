@@ -1,5 +1,6 @@
 {
-	"_help": "The quiet screen after TERMINATE. Edit the lines and links freely; each link becomes a button that opens in the browser.",
+	"_help": "An optional quiet screen after TERMINATE. Off for now: set enabled to true to show it. Each link becomes a button that opens in the browser.",
+	"enabled": false,
 	"title": "this part is real.",
 	"lines": [
 		"the machine in this game is being built right now.",
